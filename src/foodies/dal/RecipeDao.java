@@ -119,8 +119,55 @@ public class RecipeDao {
 				String steps = results.getString("Steps");
 				int cookTime = results.getInt("CookingTime");
 				Date created = results.getDate("Created");
+				int cuisineTypeId = results.getInt("CuisineTypeId");
+				String ingredientId = results.getString("IngredientId");
+				 
+				Experienced user = experiencedDao.getUserById(userId);
+				CuisineTypes cuisineType = cuisineTypesDao.getCuisineTypesById(cuisineTypeId);
+				Recipes recipe = new Recipes(recipeId, postName, description, image, steps, cookTime, created, cuisineType, ingredientId, user);
+				recipes.add(recipe);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		return recipes;
+	}
+	
+	public List<Recipes> getRecipesByCuisine(CuisineTypes cuisine) throws SQLException{
+		List<Recipes> recipes = new ArrayList<Recipes>();
+		String selectCreditcards = "SELECT * FROM Recipes WHERE CuisineTypeId=?;";
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		try {
+			ExperiencedDao experiencedDao = ExperiencedDao.getInstance();
+			CuisineTypesDao cuisineTypesDao = CuisineTypesDao.getInstance();
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectCreditcards);
+			selectStmt.setInt(1, cuisine.getCuisineTypeId());
+			results = selectStmt.executeQuery();
+			while(results.next()) {
+				int recipeId = results.getInt("RecipeId");
+				String postName = results.getString("PostName");
+				String description = results.getString("Description");
+				String image = results.getString("Image");
+				String steps = results.getString("Steps");
+				int cookTime = results.getInt("CookingTime");
+				Date created = results.getDate("Created");
 				String cuisineTypeId = results.getString("CuisineTypeId");
 				String ingredientId = results.getString("IngredientId");
+				int userId = results.getInt("UserId");
 				 
 				Experienced user = experiencedDao.getUserById(userId);
 				CuisineTypes cuisineType = cuisineTypesDao.getCuisineTypesById(Integer.parseInt(cuisineTypeId));
