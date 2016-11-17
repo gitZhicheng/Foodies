@@ -1,12 +1,11 @@
-package food.dal;
+package foodies.dal;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import food.model.Experienced;
-import food.model.Users;
+import foodies.model.*;
 
 public class ExperiencedDao extends UsersDao{
 	protected ConnectionManager connectionManager;
