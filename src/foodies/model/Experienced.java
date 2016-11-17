@@ -6,6 +6,10 @@ public class Experienced extends Users{
 		super(userId, userName, password, firstName, lastName, email);
 	}
 	
+	public Experienced(String userName, String password, String firstName, String lastName, String email) {
+		super(userName, password, firstName, lastName, email);
+	}
+	
 	public Experienced(int userId) {
 		super(userId);
 	}	

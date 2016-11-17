@@ -12,10 +12,10 @@ public class Recipes {
 	protected Date created;
 	protected CuisineTypes cuisineTypes;
 	protected String ingredientid;    //the ingredientid is a string which is consist of every ingredient's id
-	protected Experienced experiencedUser;
+	protected Experienced experienced;
 	
 	public Recipes(int recipeId, String postName, String description, String image, String step, int coookingTime,
-			Date created, CuisineTypes cuisineTypes, String ingredientid, Experienced experiencedUser) {
+			Date created, CuisineTypes cuisineTypes, String ingredientid, Experienced experienced) {
 		super();
 		this.recipeId = recipeId;
 		this.postName = postName;
@@ -26,7 +26,7 @@ public class Recipes {
 		this.created = created;
 		this.cuisineTypes = cuisineTypes;
 		this.ingredientid = ingredientid;
-		this.experiencedUser = experiencedUser;
+		this.experienced = experienced;
 	}
 
 
