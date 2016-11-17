@@ -3,6 +3,7 @@ package foodies.dal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 
 import foodies.model.Recipes;
 
@@ -30,15 +31,15 @@ public class RecipeDao {
 			insertStmt = connection.prepareStatement(insertRecipes);
  
 			insertStmt.setInt(1, recipe.getRecipeId());
-			insertStmt.setString(2, recipe.getName());
+			insertStmt.setString(2, recipe.getPostName());
 			insertStmt.setString(3, recipe.getDescription());
 			insertStmt.setString(4, recipe.getImage());
 			insertStmt.setString(5, recipe.getStep());
 			insertStmt.setInt(6, recipe.getCoookingTime());
-			insertStmt.setDate(7, recipe.getCreated());
-			insertStmt.setString(8, recipe.getCuisineType());
-			insertStmt.setString(9, recipe.getIngredientId());
-			insertStmt.setInt(10, recipe.getUserId);
+			insertStmt.setTimestamp(7, new Timestamp(recipe.getCreated().getTime()));
+			insertStmt.setInt(8, recipe.getCuisineTypes().getCuisineTypeId());
+			insertStmt.setString(9, recipe.getIngredientid());
+			insertStmt.setInt(10, recipe.getUser().getUserId());
 
  
 			insertStmt.executeUpdate();
@@ -57,13 +58,13 @@ public class RecipeDao {
 	}
 	
 	public Recipes delete(Recipes recipe) throws SQLException {
-		String deleteRecipe = "DELETE FROM Recipes WHERE RecipeName=?;";
+		String deleteRecipe = "DELETE FROM Recipes WHERE RecipeId=?;";
 		Connection connection = null;
 		PreparedStatement deleteStmt = null;
 		try {
 			connection = connectionManager.getConnection();
 			deleteStmt = connection.prepareStatement(deleteRecipe);
-			deleteStmt.setString(1, recipe.getName());
+			deleteStmt.setInt(1, recipe.getRecipeId());
 			deleteStmt.executeUpdate();
 
 			// Return null so the caller can no longer operate on the Persons instance.

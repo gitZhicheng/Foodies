@@ -1,4 +1,4 @@
-package food.model;
+package foodies.model;
 
 import java.util.Date;
 
@@ -29,23 +29,6 @@ public class Recipes {
 		this.experiencedUser = experiencedUser;
 	}
 
-	public Recipes(int recipeId) {
-		this.recipeId = recipeId;
-	}
-
-	public Recipes(String postName, String description, String image, String step, int coookingTime, Date created,
-			CuisineTypes cuisineTypes, String ingredientid, Experienced experienced) {
-		super();
-		this.postName = postName;
-		this.description = description;
-		this.image = image;
-		this.step = step;
-		this.coookingTime = coookingTime;
-		this.created = created;
-		this.cuisineTypes = cuisineTypes;
-		this.ingredientid = ingredientid;
-		this.experienced = experienced;
-	}
 
 	public int getRecipeId() {
 		return recipeId;
@@ -119,12 +102,12 @@ public class Recipes {
 		this.ingredientid = ingredientid;
 	}
 
-	public Experienced getExperienced() {
-		return experienced;
+	public Experienced getUser() {
+		return experiencedUser;
 	}
 
 	public void setExperienced(Experienced experienced) {
-		this.experienced = experienced;
+		this.experiencedUser = experienced;
 	}
 
 }

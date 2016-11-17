@@ -1,4 +1,4 @@
-package food.dal;
+package foodies.dal;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import food.dal.ConnectionManager;
 import food.model.Administrator;
 import food.model.Users;
-
+import foodies.model.*;
 
 
 public class AdministratorDao extends UsersDao{
