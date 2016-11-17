@@ -32,8 +32,8 @@ public Administrator create(Administrator administrator) throws SQLException {
 			administrator.getEmail()));	
 			
 			String insertUser = "INSERT INTO Administrator "
-			+ "(UserId,UserName) "
-			+ "VALUES(?,?);";
+			+ "(UserId) "
+			+ "VALUES(?);";
 	
 			Connection connection = null;
 			PreparedStatement insertStmt = null;
@@ -42,7 +42,6 @@ public Administrator create(Administrator administrator) throws SQLException {
 				connection = connectionManager.getConnection();
 				insertStmt = connection.prepareStatement(insertUser);
 				insertStmt.setInt(1, u.getUserId());
-				insertStmt.setString(2, u.getUserName());
 				insertStmt.executeUpdate();	
 	
 				administrator.setUserId(u.getUserId());			

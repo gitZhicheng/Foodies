@@ -30,8 +30,8 @@ public class NoviceDao extends UsersDao{
 				novice.getEmail()));	
 		
 		String insertUser = "INSERT INTO Novice "
-				+ "(UserId,UserName) "
-				+ "VALUES(?,?);";
+				+ "(UserId) "
+				+ "VALUES(?);";
 		
 		Connection connection = null;
 		PreparedStatement insertStmt = null;
@@ -40,7 +40,6 @@ public class NoviceDao extends UsersDao{
 			connection = connectionManager.getConnection();
 			insertStmt = connection.prepareStatement(insertUser);
 			insertStmt.setInt(1, u.getUserId());
-			insertStmt.setString(2, u.getUserName());
 			insertStmt.executeUpdate();	
 			
 			novice.setUserId(u.getUserId());			
