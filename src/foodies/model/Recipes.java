@@ -40,7 +40,7 @@ public class Recipes {
 		this.description = description;
 		this.image = image;
 		this.step = step;
-		this.coookingTime = coookingTime;
+		this.cookingTime = coookingTime;
 		this.created = created;
 		this.cuisineTypes = cuisineTypes;
 		this.ingredientid = ingredientid;
@@ -87,12 +87,12 @@ public class Recipes {
 		this.step = step;
 	}
 
-	public int getCoookingTime() {
-		return coookingTime;
+	public int getCookingTime() {
+		return cookingTime;
 	}
 
-	public void setCoookingTime(int coookingTime) {
-		this.coookingTime = coookingTime;
+	public void setCoookingTime(int cookingTime) {
+		this.cookingTime = cookingTime;
 	}
 
 	public Date getCreated() {
