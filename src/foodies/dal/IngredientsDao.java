@@ -10,7 +10,7 @@ import java.sql.Statement;
 
 
 public class IngredientsDao {
-	
+
 	protected ConnectionManager connectionManager;
 	// Single pattern: instantiation is limited to one object.
 	private static IngredientsDao instance = null;
@@ -23,21 +23,21 @@ public class IngredientsDao {
 		}
 		return instance;
 	}
-	
+
 	public Ingredients create(Ingredients ingredient) throws SQLException {
 		String insertIngredient = "INSERT INTO Ingredients(IngredientName) VALUES(?);";
 		Connection connection = null;
 		PreparedStatement insertStmt = null;
 		ResultSet resultKey = null;
-		
+
 		try {
 			connection = connectionManager.getConnection();
 			insertStmt = connection.prepareStatement(insertIngredient,
 					Statement.RETURN_GENERATED_KEYS);
-			
+
 			insertStmt.setString(1, ingredient.getIngredientName());
 			insertStmt.executeUpdate();
-			
+
 			resultKey = insertStmt.getGeneratedKeys();
 			int ingredientId = -1;
 			if(resultKey.next()) {
@@ -60,7 +60,7 @@ public class IngredientsDao {
 			}
 		}
 	}
-	
+
 	public Ingredients delete(Ingredients ingredient) throws SQLException {
 
 		String deleteIngredient = "DELETE FROM Ingredients WHERE IngredientId=?;";

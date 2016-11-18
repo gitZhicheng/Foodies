@@ -21,5 +21,5 @@ public class PostComments extends Comments{
 	public void setPost(Posts post) {
 		this.post = post;
 	}
-	
+
 }

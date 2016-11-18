@@ -22,7 +22,7 @@ public class PostsDao {
 		}
 		return instance;
 	}
-	
+
 	public Posts create(Posts post) throws SQLException {
 		String insertPost =
 			"INSERT INTO Posts(Title,Content,Image,UserId,Created,RecipeId) " +
@@ -41,7 +41,7 @@ public class PostsDao {
 			insertStmt.setTimestamp(5, new Timestamp(post.getCreated().getTime()));
 			insertStmt.setInt(6, post.getRecipe().getRecipeId());
 			insertStmt.executeUpdate();
-			
+
 			// Retrieve the auto-generated key and set it, so it can be used by the caller.
 			// For more details, see:
 			// http://dev.mysql.com/doc/connector-j/en/connector-j-usagenotes-last-insert-id.html
@@ -68,11 +68,11 @@ public class PostsDao {
 				resultKey.close();
 			}
 		}
-				
+
 	}
-	
+
 	public Posts delete(Posts post) throws SQLException {
-		
+
 		String deletePost = "DELETE FROM Posts WHERE PostId=?;";
 		Connection connection = null;
 		PreparedStatement deleteStmt = null;
@@ -96,5 +96,5 @@ public class PostsDao {
 			}
 		}
 	}
-	
+
 }

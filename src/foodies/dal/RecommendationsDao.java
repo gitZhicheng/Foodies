@@ -23,7 +23,7 @@ public class RecommendationsDao {
 		}
 		return instance;
 	}
-	
+
 	public Recommendations create(Recommendations recommendation) throws SQLException {
 		String insertRecommendation =
 			"INSERT INTO Recommendations(From_UserId,To_UserId,Content,Created,RecipeId) " +
@@ -35,14 +35,14 @@ public class RecommendationsDao {
 			connection = connectionManager.getConnection();
 			insertStmt = connection.prepareStatement(insertRecommendation,
 				Statement.RETURN_GENERATED_KEYS);
-			
+
 			insertStmt.setInt(1, recommendation.getFrom_user().getUserId());
 			insertStmt.setInt(2, recommendation.getTo_user().getUserId());
 			insertStmt.setString(3, recommendation.getContend());
 			insertStmt.setTimestamp(4, new Timestamp(recommendation.getCreated().getTime()));
 			insertStmt.setInt(5, recommendation.getRecipe().getRecipeId());
 			insertStmt.executeUpdate();
-			
+
 			// Retrieve the auto-generated key and set it, so it can be used by the caller.
 			// For more details, see:
 			// http://dev.mysql.com/doc/connector-j/en/connector-j-usagenotes-last-insert-id.html
@@ -69,11 +69,11 @@ public class RecommendationsDao {
 				resultKey.close();
 			}
 		}
-				
+
 	}
-	
+
 	public Recommendations delete(Recommendations recommendation) throws SQLException {
-		
+
 		String deleteRecommendation = "DELETE FROM Recommendations WHERE RecommendationId=?;";
 		Connection connection = null;
 		PreparedStatement deleteStmt = null;
@@ -96,5 +96,5 @@ public class RecommendationsDao {
 			}
 		}
 	}
-	
+
 }

@@ -20,31 +20,31 @@ public class AdministratorDao extends UsersDao{
 			instance = new AdministratorDao();
 		}
 		return instance;
-	}		
+	}
 
 
 
 public Administrator create(Administrator administrator) throws SQLException {
 	Users u=create(new Users(administrator.getUserName(),
 			administrator.getPassword(), administrator.getFirstName(), administrator.getLastName(),
-			administrator.getEmail()));	
-			
+			administrator.getEmail()));
+
 			String insertUser = "INSERT INTO Administrator "
 			+ "(UserId) "
 			+ "VALUES(?);";
-	
+
 			Connection connection = null;
 			PreparedStatement insertStmt = null;
-	
+
 			try {
 				connection = connectionManager.getConnection();
 				insertStmt = connection.prepareStatement(insertUser);
 				insertStmt.setInt(1, u.getUserId());
-				insertStmt.executeUpdate();	
-	
-				administrator.setUserId(u.getUserId());			
-				return administrator; 		
-				
+				insertStmt.executeUpdate();
+
+				administrator.setUserId(u.getUserId());
+				return administrator;
+
 			} catch (SQLException e) {
 				e.printStackTrace();
 				throw e;
@@ -55,7 +55,7 @@ public Administrator create(Administrator administrator) throws SQLException {
 				if(insertStmt != null) {
 					insertStmt.close();
 				}
-			}									
+			}
 }
 
 
@@ -87,7 +87,5 @@ public Administrator delete(Administrator administrator) throws SQLException{
 			deleteStmt.close();
 		}
 	}
-	}	
+	}
 }
-	
-

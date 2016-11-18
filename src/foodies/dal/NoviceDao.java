@@ -7,6 +7,7 @@ import java.sql.Statement;
 
 import foodies.model.*;
 
+
 public class NoviceDao extends UsersDao{
 
 	protected ConnectionManager connectionManager;
@@ -21,29 +22,29 @@ public class NoviceDao extends UsersDao{
 		}
 		return instance;
 	}
-	
-	
+
+
 	public Novice create(Novice novice) throws SQLException {
 		Users u=create(new Users(novice.getUserName(),
 				novice.getPassword(), novice.getFirstName(), novice.getLastName(),
-				novice.getEmail()));	
-		
+				novice.getEmail()));
+
 		String insertUser = "INSERT INTO Novice "
 				+ "(UserId) "
 				+ "VALUES(?);";
-		
+
 		Connection connection = null;
 		PreparedStatement insertStmt = null;
-		
+
 		try {
 			connection = connectionManager.getConnection();
 			insertStmt = connection.prepareStatement(insertUser);
 			insertStmt.setInt(1, u.getUserId());
-			insertStmt.executeUpdate();	
-			
-			novice.setUserId(u.getUserId());			
-			return novice; 
-			
+			insertStmt.executeUpdate();
+
+			novice.setUserId(u.getUserId());
+			return novice;
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw e;
@@ -54,11 +55,11 @@ public class NoviceDao extends UsersDao{
 			if(insertStmt != null) {
 				insertStmt.close();
 			}
-		}		
+		}
 	}
 
 
-	
+
 	public Novice delete(Novice novice) throws SQLException {
 		String deleteNovice = "DELETE FROM Novice WHERE UserId=?;";
 		Connection connection = null;
@@ -86,10 +87,10 @@ public class NoviceDao extends UsersDao{
 				deleteStmt.close();
 			}
 		}
-	}	
-	
-	
-	
-	
-	
+	}
+
+
+
+
+
 }

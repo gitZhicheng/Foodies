@@ -3,13 +3,13 @@ package foodies.model;
 public class Ingredients {
 	protected int ingredientId;
 	protected String ingredientName;
-	
+
 	public Ingredients(int ingredientId, String ingredientName) {
 		super();
 		this.ingredientId = ingredientId;
 		this.ingredientName = ingredientName;
 	}
-	
+
 	public Ingredients(int ingredientId) {
 		this.ingredientId = ingredientId;
 	}

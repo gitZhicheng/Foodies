@@ -7,7 +7,7 @@ public class Users {
 	protected String firstName;
 	protected String lastName;
 	protected String email;
-	
+
 	public Users(int userId, String userName, String password, String firstName, String lastName, String email) {
 		super();
 		this.userId = userId;
@@ -17,7 +17,7 @@ public class Users {
 		this.lastName = lastName;
 		this.email = email;
 	}
-	
+
 	public Users(int userId) {
 		this.userId = userId;
 	}
