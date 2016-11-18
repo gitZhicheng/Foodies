@@ -5,8 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import foodies.model.*;
-
+import foodies.model.Novice;
+import foodies.model.Users;
 
 public class NoviceDao extends UsersDao{
 

@@ -29,6 +29,24 @@ public class Recipes {
 		this.experienced = experienced;
 	}
 
+	public Recipes(int recipeId) {
+		this.recipeId = recipeId;
+	}
+
+	public Recipes(String postName, String description, String image, String step, int coookingTime, Date created,
+			CuisineTypes cuisineTypes, String ingredientid, Experienced experienced) {
+		super();
+		this.postName = postName;
+		this.description = description;
+		this.image = image;
+		this.step = step;
+		this.cookingTime = coookingTime;
+		this.created = created;
+		this.cuisineTypes = cuisineTypes;
+		this.ingredientid = ingredientid;
+		this.experienced = experienced;
+	}
+
 	public int getRecipeId() {
 		return recipeId;
 	}
@@ -101,7 +119,7 @@ public class Recipes {
 		this.ingredientid = ingredientid;
 	}
 
-	public Experienced getUser() {
+	public Experienced getExperienced() {
 		return experienced;
 	}
 

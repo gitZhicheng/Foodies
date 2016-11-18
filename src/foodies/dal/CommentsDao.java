@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 
-import foodies.model.*;
+import food.model.*;
 
 public class CommentsDao {
 	protected ConnectionManager connectionManager;
