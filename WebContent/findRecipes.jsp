@@ -30,8 +30,8 @@
             <tr>
                 <th>RecipeName</th>
                 <th>Desciption</th>
-                <th>Created</th>
                 <th>Cooking Time</th>
+                <th>Created At</th>
                 <th>UserName</th>
             </tr>
             <c:forEach items="${recipes}" var="recipe">

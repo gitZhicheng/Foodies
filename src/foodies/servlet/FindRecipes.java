@@ -34,17 +34,22 @@ public class FindRecipes extends HttpServlet {
     	Map<String, String> messages = new HashMap<String, String>();
         request.setAttribute("messages", messages);
         
-        int userId = Integer.valueOf(request.getParameter("userId"));
-    	//int userId = Integer.valueOf(request.getParameter("userId"));
+        String stringUserId = request.getParameter("userId");
     	List<Recipes> recipes = new ArrayList<Recipes>();
-		try {
-			recipes = recipeDao.getRecipesByUserId(userId);
-			messages.put("success", "Displaying results for userId: " + userId);
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new IOException(e);
+        if (stringUserId == null || stringUserId.trim().isEmpty()) {
+            messages.put("success", "Invalid UserId");
         }
-		request.setAttribute("userId", userId);
+        else {
+	        int userId = Integer.valueOf(stringUserId);
+			try {
+				recipes = recipeDao.getRecipesByUserId(userId);
+				messages.put("success", "Displaying results for userId: " + userId);
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new IOException(e);
+	        }
+        }
+		request.setAttribute("userId", stringUserId);
 		request.setAttribute("recipes", recipes);
 		request.getRequestDispatcher("findRecipes.jsp").forward(request, response);
 	}

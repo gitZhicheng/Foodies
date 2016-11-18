@@ -39,7 +39,7 @@
 		<input id="userId" name="userId" value="<c:out value="${recipe.getExperienced().getUserId()}"/>" type="hidden" />
 		<input id="image" name="image" value="<c:out value="${recipe.getImage()}"/>" type="hidden" />
 		<p>
-			<input type="submit" value="UPDATE">
+			<input type="submit" value="Update">
 		</p>
 	</form>
 		

@@ -36,7 +36,7 @@
 		</p>
 		<input id="userId" name="userId" value="${fn:escapeXml(param.userId)}" type="hidden" />
 		<p>
-			<input type="submit" value="CREATE">
+			<input type="submit" value="Create">
 		</p>
 	</form>
 		
