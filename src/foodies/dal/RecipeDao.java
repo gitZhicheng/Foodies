@@ -97,10 +97,8 @@ public class RecipeDao {
 			}
 		}
 	}
-	
-	public List<Recipes> getRecipesByUseId(int userId) throws SQLException{
-		List<Recipes> recipes = new ArrayList<Recipes>();
-		String selectCreditcards = "SELECT * FROM Recipes WHERE UserId=?;";
+	public Recipes getRecipeById(int recipeId) throws SQLException{
+		String selectRecipes = "SELECT * FROM Recipes WHERE RecipeId=?;";
 		Connection connection = null;
 		PreparedStatement selectStmt = null;
 		ResultSet results = null;
@@ -108,7 +106,52 @@ public class RecipeDao {
 			ExperiencedDao experiencedDao = ExperiencedDao.getInstance();
 			CuisineTypesDao cuisineTypesDao = CuisineTypesDao.getInstance();
 			connection = connectionManager.getConnection();
-			selectStmt = connection.prepareStatement(selectCreditcards);
+			selectStmt = connection.prepareStatement(selectRecipes);
+			selectStmt.setInt(1, recipeId);
+			results = selectStmt.executeQuery();
+			
+			int userId = results.getInt("UserId");
+			String postName = results.getString("PostName");
+			String description = results.getString("Description");
+			String image = results.getString("Image");
+			String steps = results.getString("Steps");
+			int cookTime = results.getInt("CookingTime");
+			Date created = results.getDate("Created");
+			int cuisineTypeId = results.getInt("CuisineTypeId");
+			String ingredientId = results.getString("IngredientId");
+
+			Experienced user = experiencedDao.getExperiencedById(userId);
+			CuisineTypes cuisineType = cuisineTypesDao.getCuisineTypesById(cuisineTypeId);
+			Recipes recipe = new Recipes(recipeId, postName, description, image, steps, cookTime, created, cuisineType, ingredientId, user);
+			
+			return recipe;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+	}
+	
+	public List<Recipes> getRecipesByUserId(int userId) throws SQLException{
+		List<Recipes> recipes = new ArrayList<Recipes>();
+		String selectRecipes = "SELECT * FROM Recipes WHERE UserId=?;";
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		try {
+			ExperiencedDao experiencedDao = ExperiencedDao.getInstance();
+			CuisineTypesDao cuisineTypesDao = CuisineTypesDao.getInstance();
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectRecipes);
 			selectStmt.setInt(1, userId);
 			results = selectStmt.executeQuery();
 			while(results.next()) {
@@ -148,7 +191,7 @@ public class RecipeDao {
 		ExperiencedDao experiencedDao = ExperiencedDao.getInstance();
 		Experienced user = experiencedDao.getExperiencedByUserName(userName);
 		int id = user.getUserId();
-		return getRecipesByUseId(id);
+		return getRecipesByUserId(id);
 	}
 
 		
