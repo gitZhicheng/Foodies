@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,27 +28,36 @@ public class RecipeDao {
 	}
 	
 	public Recipes create(Recipes recipe) throws SQLException {
-		String insertRecipes = "INSERT INTO Recipes(RecipeId,PostName,Description,Image,Steps,CookingTime,Created,"
-				+ "CuisineTypeId,Ingredientid,UserId) VALUES(?,?,?,?,?,?,?,?,?,?);";
+		String insertRecipes = 
+				"INSERT INTO Recipes(PostName,Description,Image,Steps,CookingTime,Created,CuisineTypeId,Ingredientid,UserId)" +
+						"VALUES(?,?,?,?,?,?,?,?,?);";
 		Connection connection = null;
 		PreparedStatement insertStmt = null;
+		ResultSet resultKey = null;
 		try {
 			connection = connectionManager.getConnection();
-			insertStmt = connection.prepareStatement(insertRecipes);
- 
-			insertStmt.setInt(1, recipe.getRecipeId());
-			insertStmt.setString(2, recipe.getPostName());
-			insertStmt.setString(3, recipe.getDescription());
-			insertStmt.setString(4, recipe.getImage());
-			insertStmt.setString(5, recipe.getStep());
-			insertStmt.setInt(6, recipe.getCookingTime());
-			insertStmt.setTimestamp(7, new Timestamp(recipe.getCreated().getTime()));
-			insertStmt.setInt(8, recipe.getCuisineTypes().getCuisineTypeId());
-			insertStmt.setString(9, recipe.getIngredientid());
-			insertStmt.setInt(10, recipe.getUser().getUserId());
-
- 
+			insertStmt = connection.prepareStatement(insertRecipes,
+					Statement.RETURN_GENERATED_KEYS);
+			
+			insertStmt.setString(1, recipe.getPostName());
+			insertStmt.setString(2, recipe.getDescription());
+			insertStmt.setString(3, recipe.getImage());
+			insertStmt.setString(4, recipe.getStep());
+			insertStmt.setInt(5, recipe.getCookingTime());
+			insertStmt.setTimestamp(6, new Timestamp(recipe.getCreated().getTime()));
+			insertStmt.setInt(7, recipe.getCuisineTypes().getCuisineTypeId());
+			insertStmt.setString(8, recipe.getIngredientid());
+			insertStmt.setInt(9, recipe.getUser().getUserId());
 			insertStmt.executeUpdate();
+			
+			resultKey = insertStmt.getGeneratedKeys();
+			int recipeId = -1;
+			if(resultKey.next()) {
+				recipeId = resultKey.getInt(1);
+			} else {
+				throw new SQLException("Unable to retrieve auto-generated key.");
+			}
+			recipe.setRecipeId(recipeId);
 			return recipe;
 		} catch (SQLException e) {
 			e.printStackTrace();
