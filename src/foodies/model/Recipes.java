@@ -103,11 +103,11 @@ public class Recipes {
 	}
 
 	public Experienced getUser() {
-		return experiencedUser;
+		return experienced;
 	}
 
 	public void setExperienced(Experienced experienced) {
-		this.experiencedUser = experienced;
+		this.experienced = experienced;
 	}
 
 }

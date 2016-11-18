@@ -1,4 +1,4 @@
-package food.model;
+package foodies.model;
 
 public class Users {
 	protected int userId;

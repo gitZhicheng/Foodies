@@ -122,7 +122,7 @@ public class RecipeDao {
 				int cuisineTypeId = results.getInt("CuisineTypeId");
 				String ingredientId = results.getString("IngredientId");
 				 
-				Experienced user = experiencedDao.getUserById(userId);
+				Experienced user = experiencedDao.getExperiencedById(userId);
 				CuisineTypes cuisineType = cuisineTypesDao.getCuisineTypesById(cuisineTypeId);
 				Recipes recipe = new Recipes(recipeId, postName, description, image, steps, cookTime, created, cuisineType, ingredientId, user);
 				recipes.add(recipe);
@@ -144,6 +144,14 @@ public class RecipeDao {
 		return recipes;
 	}
 	
+	public List<Recipes> getRecipesByUserName(String userName) throws SQLException{
+		ExperiencedDao experiencedDao = ExperiencedDao.getInstance();
+		Experienced user = experiencedDao.getExperiencedByUserName(userName);
+		int id = user.getUserId();
+		return getRecipesByUseId(id);
+	}
+
+		
 	public List<Recipes> getRecipesByCuisine(CuisineTypes cuisine) throws SQLException{
 		List<Recipes> recipes = new ArrayList<Recipes>();
 		String selectCreditcards = "SELECT * FROM Recipes WHERE CuisineTypeId=?;";
@@ -169,7 +177,7 @@ public class RecipeDao {
 				String ingredientId = results.getString("IngredientId");
 				int userId = results.getInt("UserId");
 				 
-				Experienced user = experiencedDao.getUserById(userId);
+				Experienced user = experiencedDao.getExperiencedById(userId);
 				CuisineTypes cuisineType = cuisineTypesDao.getCuisineTypesById(Integer.parseInt(cuisineTypeId));
 				Recipes recipe = new Recipes(recipeId, postName, description, image, steps, cookTime, created, cuisineType, ingredientId, user);
 				recipes.add(recipe);

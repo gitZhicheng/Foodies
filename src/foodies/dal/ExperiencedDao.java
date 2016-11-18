@@ -130,5 +130,45 @@ public class ExperiencedDao extends UsersDao{
 			return null;		
 	}
 			
+	public Experienced getExperiencedByUserName(String userName) throws SQLException {
+		String selectExperienced =
+				"SELECT Experienced.UserId as UserId,Experienced.UserName as UserName,Password,Firstname,LastName,Email " +
+				"FROM Experienced INNER JOIN Users " +
+				"ON Experienced.UserId = Users.UserId "	+	
+				"WHERE Experienced.UserName=?;";
+			Connection connection = null;
+			PreparedStatement selectStmt = null;
+			ResultSet results = null;
+			try {
+				connection = connectionManager.getConnection();
+				selectStmt = connection.prepareStatement(selectExperienced);
+				selectStmt.setString(1, userName);
+				results = selectStmt.executeQuery();
+				
+				if(results.next()) {
+					int resultUsernId = results.getInt("UserId");
+					String password = results.getString("Password");
+					String firstName = results.getString("FirstName");
+					String lastName = results.getString("LastName");
+					String email = results.getString("Email");
+					Experienced experienced=new Experienced(resultUsernId, userName, password, firstName, lastName, email);
+					return experienced;
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw e;
+			} finally {
+				if(connection != null) {
+					connection.close();
+				}
+				if(selectStmt != null) {
+					selectStmt.close();
+				}
+				if(results != null) {
+					results.close();
+				}
+			}
+			return null;		
+	}
 	
 }
