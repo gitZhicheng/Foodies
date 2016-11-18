@@ -40,7 +40,7 @@ public class RecipeDao {
 			insertStmt.setString(3, recipe.getDescription());
 			insertStmt.setString(4, recipe.getImage());
 			insertStmt.setString(5, recipe.getStep());
-			insertStmt.setInt(6, recipe.getCoookingTime());
+			insertStmt.setInt(6, recipe.getCookingTime());
 			insertStmt.setTimestamp(7, new Timestamp(recipe.getCreated().getTime()));
 			insertStmt.setInt(8, recipe.getCuisineTypes().getCuisineTypeId());
 			insertStmt.setString(9, recipe.getIngredientid());
