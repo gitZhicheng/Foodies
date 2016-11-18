@@ -1,4 +1,4 @@
-package food.model;
+package foodies.model;
 
 import java.math.BigDecimal;
 
@@ -7,7 +7,7 @@ public class Reviews {
 	protected BigDecimal rating;
 	protected Users user;
 	protected Recipes recipe;
-	
+
 	public Reviews(int reviewId, BigDecimal rating, Users user, Recipes recipe) {
 		super();
 		this.reviewId = reviewId;
@@ -15,7 +15,7 @@ public class Reviews {
 		this.user = user;
 		this.recipe = recipe;
 	}
-	
+
 	public Reviews(int reviewId) {
 		this.reviewId = reviewId;
 	}

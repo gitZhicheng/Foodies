@@ -1,4 +1,4 @@
-package food.model;
+package foodies.model;
 
 import java.util.Date;
 
@@ -9,7 +9,7 @@ public class Recommendations {
 	protected String contend;
 	protected Date created;
 	protected Recipes recipe;
-	
+
 	public Recommendations(int recommendationId, Users from_user, Users to_user, String contend, Date created,
 			Recipes recipe) {
 		super();
@@ -81,5 +81,5 @@ public class Recommendations {
 	public void setRecipe(Recipes recipe) {
 		this.recipe = recipe;
 	}
-	
+
 }

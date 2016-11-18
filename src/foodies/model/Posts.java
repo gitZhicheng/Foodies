@@ -1,4 +1,4 @@
-package food.model;
+package foodies.model;
 
 import java.util.Date;
 
@@ -10,7 +10,7 @@ public class Posts {
 	protected Users user;
 	protected Date created;
 	protected Recipes recipe;
-	
+
 	public Posts(int postId, String title, String content, String image, Users user, Date created, Recipes recipe) {
 		super();
 		this.postId = postId;
@@ -21,7 +21,7 @@ public class Posts {
 		this.created = created;
 		this.recipe = recipe;
 	}
-	
+
 	public Posts(int postId) {
 		this.postId = postId;
 	}

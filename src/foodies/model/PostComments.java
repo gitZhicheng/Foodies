@@ -1,4 +1,4 @@
-package food.model;
+package foodies.model;
 
 import java.util.Date;
 
@@ -21,5 +21,5 @@ public class PostComments extends Comments{
 	public void setPost(Posts post) {
 		this.post = post;
 	}
-	
+
 }

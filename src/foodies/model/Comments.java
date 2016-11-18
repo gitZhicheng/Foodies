@@ -1,4 +1,4 @@
-package food.model;
+package foodies.model;
 
 import java.util.Date;
 
@@ -7,7 +7,7 @@ public class Comments {
 	protected String contend;
 	protected Date created;
 	protected Users user;
-	
+
 	public Comments(int commentId, String contend, Date created, Users user) {
 		super();
 		this.commentId = commentId;
@@ -58,5 +58,5 @@ public class Comments {
 	public void setUser(Users user) {
 		this.user = user;
 	}
-	
+
 }
