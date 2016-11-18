@@ -28,8 +28,8 @@ public class ExperiencedDao extends UsersDao{
 			experienced.getEmail()));	
 				
 			String insertUser = "INSERT INTO Experienced "
-					+ "(UserId,UserName) "
-					+ "VALUES(?,?);";
+					+ "(UserId) "
+					+ "VALUES(?);";
 			
 			Connection connection = null;
 			PreparedStatement insertStmt = null;
@@ -38,7 +38,6 @@ public class ExperiencedDao extends UsersDao{
 				connection = connectionManager.getConnection();
 				insertStmt = connection.prepareStatement(insertUser);
 				insertStmt.setInt(1, u.getUserId());
-				insertStmt.setString(2, u.getUserName());
 				insertStmt.executeUpdate();	
 				
 				experienced.setUserId(u.getUserId());			
@@ -90,7 +89,7 @@ public class ExperiencedDao extends UsersDao{
 	
 	public Experienced getExperiencedById(int userId) throws SQLException {
 		String selectExperienced =
-				"SELECT Experienced.UserId as UserId,Experienced.UserName as UserName,Password,Firstname,LastName,Email " +
+				"SELECT Experienced.UserId as UserId,UserName,Password,Firstname,LastName,Email " +
 				"FROM Experienced INNER JOIN Users " +
 				"ON Experienced.UserId = Users.UserId "	+	
 				"WHERE Experienced.UserId=?;";

@@ -8,13 +8,13 @@ public class Recipes {
 	protected String description;
 	protected String image;
 	protected String step;
-	protected int coookingTime;
+	protected int cookingTime;
 	protected Date created;
 	protected CuisineTypes cuisineTypes;
 	protected String ingredientid;    //the ingredientid is a string which is consist of every ingredient's id
 	protected Experienced experienced;
 	
-	public Recipes(int recipeId, String postName, String description, String image, String step, int coookingTime,
+	public Recipes(int recipeId, String postName, String description, String image, String step, int cookingTime,
 			Date created, CuisineTypes cuisineTypes, String ingredientid, Experienced experienced) {
 		super();
 		this.recipeId = recipeId;
@@ -22,13 +22,33 @@ public class Recipes {
 		this.description = description;
 		this.image = image;
 		this.step = step;
-		this.coookingTime = coookingTime;
+		this.cookingTime = cookingTime;
 		this.created = created;
 		this.cuisineTypes = cuisineTypes;
 		this.ingredientid = ingredientid;
 		this.experienced = experienced;
 	}
 
+<<<<<<< HEAD
+=======
+	public Recipes(int recipeId) {
+		this.recipeId = recipeId;
+	}
+
+	public Recipes(String postName, String description, String image, String step, int coookingTime, Date created,
+			CuisineTypes cuisineTypes, String ingredientid, Experienced experienced) {
+		super();
+		this.postName = postName;
+		this.description = description;
+		this.image = image;
+		this.step = step;
+		this.cookingTime = coookingTime;
+		this.created = created;
+		this.cuisineTypes = cuisineTypes;
+		this.ingredientid = ingredientid;
+		this.experienced = experienced;
+	}
+>>>>>>> 1bd292491c5eceb2151e73f6e351e4ec560c5cd1
 
 	public int getRecipeId() {
 		return recipeId;
@@ -70,12 +90,12 @@ public class Recipes {
 		this.step = step;
 	}
 
-	public int getCoookingTime() {
-		return coookingTime;
+	public int getCookingTime() {
+		return cookingTime;
 	}
 
-	public void setCoookingTime(int coookingTime) {
-		this.coookingTime = coookingTime;
+	public void setCoookingTime(int cookingTime) {
+		this.cookingTime = cookingTime;
 	}
 
 	public Date getCreated() {
