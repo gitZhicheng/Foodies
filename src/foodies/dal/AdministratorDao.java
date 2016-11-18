@@ -4,9 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import food.dal.ConnectionManager;
-import food.model.Administrator;
-import food.model.Users;
+import foodies.dal.*;
 import foodies.model.*;
 
 

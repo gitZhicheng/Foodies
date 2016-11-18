@@ -1,10 +1,10 @@
-package food.dal;
+package foodies.dal;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import food.model.*;
+import foodies.model.*;
 
 
 public class PostCommentsDao extends CommentsDao{

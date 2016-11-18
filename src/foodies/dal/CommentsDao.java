@@ -1,4 +1,4 @@
-package food.dal;
+package foodies.dal;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 
-import food.model.*;
+import foodies.model.*;
 
 public class CommentsDao {
 	protected ConnectionManager connectionManager;

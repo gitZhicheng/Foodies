@@ -1,19 +1,13 @@
-package food.tools;
+package foodies.tools;
 
 import java.sql.SQLException;
 
-import food.dal.AdministratorDao;
-import food.dal.ExperiencedDao;
-import food.dal.NoviceDao;
-import food.dal.UsersDao;
-import food.model.Administrator;
-import food.model.Experienced;
-import food.model.Novice;
-import food.model.Users;
+import foodies.dal.*;
+import foodies.model.*;
 
 
 
-public class inserter {
+public class Inserter {
 
 	public static void main(String[] args) throws SQLException {
 		//DAO instances

@@ -1,4 +1,4 @@
-package food.model;
+package foodies.model;
 
 public class Administrator extends Users{
 

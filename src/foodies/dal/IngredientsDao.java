@@ -1,6 +1,6 @@
-package food.dal;
+package foodies.dal;
 
-import food.model.*;
+import foodies.model.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

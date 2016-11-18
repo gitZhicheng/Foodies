@@ -1,12 +1,11 @@
-package food.dal;
+package foodies.dal;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import food.model.Novice;
-import food.model.Users;
+import foodies.model.*;
 
 public class NoviceDao extends UsersDao{
 
