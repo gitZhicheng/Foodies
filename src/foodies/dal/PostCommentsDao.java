@@ -1,14 +1,14 @@
-package food.dal;
+package foodies.dal;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import food.model.*;
+import foodies.model.*;
 
 
 public class PostCommentsDao extends CommentsDao{
-	
+
 	protected ConnectionManager connectionManager;
 
 	private static PostCommentsDao instance = null;
@@ -21,7 +21,7 @@ public class PostCommentsDao extends CommentsDao{
 		}
 		return instance;
 	}
-	
+
 	public PostComments create(PostComments postComment ) throws SQLException {
 		// Insert into the superclass table first.
 		create(new Comments(postComment.getCommentId(), postComment.getContend(), postComment.getCreated(), postComment.getUser()));
@@ -48,7 +48,7 @@ public class PostCommentsDao extends CommentsDao{
 			}
 		}
 	}
-	
+
 	public PostComments delete(PostComments postComment) throws SQLException {
 		String deletePostComment = "DELETE FROM PostComments WHERE CommentId=?;";
 		Connection connection = null;
@@ -77,7 +77,7 @@ public class PostCommentsDao extends CommentsDao{
 			}
 		}
 	}
-	
-	
+
+
 
 }

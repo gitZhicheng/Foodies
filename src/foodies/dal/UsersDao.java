@@ -1,4 +1,4 @@
-package food.dal;
+package foodies.dal;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import food.model.Users;
+import foodies.model.Users;
 
 
 
@@ -22,20 +22,20 @@ public class UsersDao{
 				instance = new UsersDao();
 			}
 			return instance;
-		}		
-	
-		
-	
+		}
+
+
+
 	public Users create(Users user) throws SQLException {
-	
+
 		String insertUser = "INSERT INTO Users "
 				+ "(UserName,Password,FirstName,LastName,Email) "
 				+ "VALUES(?,?,?,?,?);";
-		
+
 		Connection connection = null;
 		PreparedStatement insertStmt = null;
 		ResultSet resultKey = null;
-		
+
 		try {
 			connection = connectionManager.getConnection();
 			insertStmt = connection.prepareStatement(insertUser, Statement.RETURN_GENERATED_KEYS);
@@ -44,9 +44,9 @@ public class UsersDao{
 			insertStmt.setString(3, user.getFirstName());
 			insertStmt.setString(4, user.getLastName());
 			insertStmt.setString(5, user.getEmail());
-			insertStmt.executeUpdate();	
-			
-		
+			insertStmt.executeUpdate();
+
+
 			// Retrieve the auto-generated key and set it, so it can be used by the caller.
 			resultKey = insertStmt.getGeneratedKeys();
 			int userId = -1;
@@ -55,10 +55,10 @@ public class UsersDao{
 			} else {
 				throw new SQLException("Unable to retrieve auto-generated key.");
 			}
-			
-			user.setUserId(userId);			
+
+			user.setUserId(userId);
 			return user;
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw e;
@@ -73,7 +73,7 @@ public class UsersDao{
 	}
 
 
-	
+
 	public Users delete(Users user) throws SQLException {
 		String deleteUsers = "DELETE FROM Users WHERE UserId=?;";
 		Connection connection = null;
@@ -96,11 +96,11 @@ public class UsersDao{
 				deleteStmt.close();
 			}
 		}
-		
-	}	
-	
 
-	
+	}
+
+
+
 	//getuserbyuserId
 	public Users getUserById(int userId) throws SQLException {
 		String selectUser =
@@ -115,7 +115,7 @@ public class UsersDao{
 				selectStmt = connection.prepareStatement(selectUser);
 				selectStmt.setInt(1, userId);
 				results = selectStmt.executeQuery();
-				
+
 				if(results.next()) {
 					int resultUsernId = results.getInt("UserId");
 					String userName = results.getString("UserName");
@@ -140,8 +140,8 @@ public class UsersDao{
 					results.close();
 				}
 			}
-			return null;		
+			return null;
 	}
-		
-	
+
+
 }

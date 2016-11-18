@@ -1,4 +1,4 @@
-package food.dal;
+package foodies.dal;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -22,7 +22,7 @@ public class CommentsDao {
 		}
 		return instance;
 	}
-	
+
 	public Comments create(Comments comment) throws SQLException {
 		String insertComment =
 			"INSERT INTO Comments(Content,Created,UserId) " +
@@ -38,7 +38,7 @@ public class CommentsDao {
 			insertStmt.setTimestamp(2, new Timestamp(comment.getCreated().getTime()));
 			insertStmt.setInt(3, comment.getUser().getUserId());
 			insertStmt.executeUpdate();
-			
+
 			// Retrieve the auto-generated key and set it, so it can be used by the caller.
 			// For more details, see:
 			// http://dev.mysql.com/doc/connector-j/en/connector-j-usagenotes-last-insert-id.html
@@ -65,11 +65,11 @@ public class CommentsDao {
 				resultKey.close();
 			}
 		}
-				
+
 	}
-	
+
 	public Comments delete(Comments comment) throws SQLException {
-		
+
 		String deleteComment = "DELETE FROM Comments WHERE CommentId=?;";
 		Connection connection = null;
 		PreparedStatement deleteStmt = null;
@@ -93,6 +93,6 @@ public class CommentsDao {
 			}
 		}
 	}
-	
+
 
 }

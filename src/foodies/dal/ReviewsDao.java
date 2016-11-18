@@ -1,4 +1,4 @@
-package food.dal;
+package foodies.dal;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -6,10 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import food.model.*;
+import foodies.model.*;
 
 public class ReviewsDao {
-	
+
 	protected ConnectionManager connectionManager;
 
 	private static ReviewsDao instance = null;
@@ -22,7 +22,7 @@ public class ReviewsDao {
 		}
 		return instance;
 	}
-	
+
 	public Reviews create(Reviews review) throws SQLException {
 		String insertReview =
 			"INSERT INTO Reviews(Rating,UserId,RecipeId) " +
@@ -38,7 +38,7 @@ public class ReviewsDao {
 			insertStmt.setInt(2, review.getUser().getUserId());
 			insertStmt.setInt(3, review.getRecipe().getRecipeId());
 			insertStmt.executeUpdate();
-			
+
 			// Retrieve the auto-generated key and set it, so it can be used by the caller.
 			// For more details, see:
 			// http://dev.mysql.com/doc/connector-j/en/connector-j-usagenotes-last-insert-id.html
@@ -65,11 +65,11 @@ public class ReviewsDao {
 				resultKey.close();
 			}
 		}
-				
+
 	}
-	
+
 	public Reviews delete(Reviews review) throws SQLException {
-		
+
 		String deleteReview = "DELETE FROM Reviews WHERE ReviewId=?;";
 		Connection connection = null;
 		PreparedStatement deleteStmt = null;
