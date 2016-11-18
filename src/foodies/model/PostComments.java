@@ -9,6 +9,13 @@ public class PostComments extends Comments{
 		super(commentId, contend, created, user);
 		this.post = post;
 	}
+	
+	public PostComments(String contend, Date created, Users user, Posts post) {
+		super(contend, created, user);
+		this.post = post;
+	}
+
+
 
 	public PostComments(int commentId) {
 		super(commentId);
@@ -21,5 +28,5 @@ public class PostComments extends Comments{
 	public void setPost(Posts post) {
 		this.post = post;
 	}
-
+	
 }

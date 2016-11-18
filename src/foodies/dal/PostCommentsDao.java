@@ -2,14 +2,15 @@ package foodies.dal;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
 
 import foodies.model.*;
 
 
 public class PostCommentsDao extends CommentsDao{
-
-	protected ConnectionManager connectionManager;
 
 	private static PostCommentsDao instance = null;
 	protected PostCommentsDao() {
@@ -21,20 +22,22 @@ public class PostCommentsDao extends CommentsDao{
 		}
 		return instance;
 	}
-
+	
 	public PostComments create(PostComments postComment ) throws SQLException {
 		// Insert into the superclass table first.
 		create(new Comments(postComment.getCommentId(), postComment.getContend(), postComment.getCreated(), postComment.getUser()));
 
-		String insertFoodCartRestaurant = "INSERT INTO PostComments(CommentId,PostId) VALUES(?,?);";
+		String insertPostComment = "INSERT INTO PostComments(CommentId,PostId) VALUES(?,?);";
 		Connection connection = null;
 		PreparedStatement insertStmt = null;
 		try {
 			connection = connectionManager.getConnection();
-			insertStmt = connection.prepareStatement(insertFoodCartRestaurant);
+			insertStmt = connection.prepareStatement(insertPostComment,
+					Statement.RETURN_GENERATED_KEYS);
 			insertStmt.setInt(1, postComment.getCommentId());
 			insertStmt.setInt(2, postComment.getPost().getPostId());
 			insertStmt.executeUpdate();
+			
 			return postComment ;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -49,6 +52,7 @@ public class PostCommentsDao extends CommentsDao{
 		}
 	}
 
+	
 	public PostComments delete(PostComments postComment) throws SQLException {
 		String deletePostComment = "DELETE FROM PostComments WHERE CommentId=?;";
 		Connection connection = null;
@@ -77,7 +81,7 @@ public class PostCommentsDao extends CommentsDao{
 			}
 		}
 	}
-
-
+	
+	
 
 }
