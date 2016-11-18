@@ -1,12 +1,12 @@
 package foodies.dal;
 
-import foodies.model.*;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import foodies.model.*;
 
 
 public class CuisineTypesDao {
@@ -63,43 +63,6 @@ public class CuisineTypesDao {
 		}
 	}
 	
-	public CuisineTypes getCuisineTypesById(int id) throws SQLException {
-		String selectCuisineTypes = "SELECT * FROM CuisineTypes WHERE CuisineTypeId=?;";
-		Connection connection = null;
-		PreparedStatement selectStmt = null;
-		ResultSet results = null;
-		try {
-			connection = connectionManager.getConnection();
-			selectStmt = connection.prepareStatement(selectCuisineTypes);
-			selectStmt.setInt(1, id);
-
-			results = selectStmt.executeQuery();
-
-			if(results.next()) {
-				String name = results.getString("CuisineTypeName");
-				int parentId = results.getInt("ParentId");
-				String parentIds = results.getString("ParentIds");
-
-				CuisineTypes cuisineType = new CuisineTypes(id, name, parentId, parentIds);
-				return cuisineType;
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw e;
-		} finally {
-			if(connection != null) {
-				connection.close();
-			}
-			if(selectStmt != null) {
-				selectStmt.close();
-			}
-			if(results != null) {
-				results.close();
-			}
-		}
-		return null;
-	}
-	
 	public CuisineTypes delete(CuisineTypes cuisineType) throws SQLException {
 
 		String deleteCuisineType = "DELETE FROM CuisineTypes WHERE CuisineTypeId=?;";
@@ -123,6 +86,44 @@ public class CuisineTypesDao {
 				deleteStmt.close();
 			}
 		}
+	}
+	
+	public CuisineTypes getCuisineTypesById(int cuisineTypeId) throws SQLException {
+		String selectCuisineType = "SELECT * FROM CuisineTypes WHERE CuisineTypeId=?;";
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		try {
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectCuisineType);
+			selectStmt.setInt(1, cuisineTypeId);
+
+			results = selectStmt.executeQuery();
+
+			if(results.next()) {
+				int resultCuisineId = results.getInt("CuisineTypeId");
+				String cuisineTypeName = results.getString("CuisineTypeName");
+				int parentId = results.getInt("ParentId");
+				String parentIds = results.getString("ParentIds");
+
+				CuisineTypes cuisineType = new CuisineTypes(resultCuisineId, cuisineTypeName, parentId, parentIds);
+				return cuisineType;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		return null;
 	}
 
 }
