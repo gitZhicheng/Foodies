@@ -1,4 +1,4 @@
-package food.tools;
+package foodies.tools;
 
 import java.sql.SQLException;
 
