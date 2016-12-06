@@ -143,5 +143,45 @@ public class UsersDao{
 			return null;
 	}
 
+	public Users getUserByUserName(String username) throws SQLException {
+		String selectUser =
+				"SELECT UserId,UserName,Password,Firstname,LastName,Email " +
+				"FROM Users " +
+				"WHERE UserName=?;";
+			Connection connection = null;
+			PreparedStatement selectStmt = null;
+			ResultSet results = null;
+			try {
+				connection = connectionManager.getConnection();
+				selectStmt = connection.prepareStatement(selectUser);
+				selectStmt.setString(1, username);
+				results = selectStmt.executeQuery();
+
+				if(results.next()) {
+					int resultUsernId = results.getInt("UserId");
+					String userName = results.getString("UserName");
+					String password = results.getString("Password");
+					String firstName = results.getString("FirstName");
+					String lastName = results.getString("LastName");
+					String email = results.getString("Email");
+					Users user=new Users(resultUsernId, userName, password, firstName, lastName, email);
+					return user;
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw e;
+			} finally {
+				if(connection != null) {
+					connection.close();
+				}
+				if(selectStmt != null) {
+					selectStmt.close();
+				}
+				if(results != null) {
+					results.close();
+				}
+			}
+			return null;
+	}
 
 }
