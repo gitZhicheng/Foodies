@@ -75,7 +75,7 @@ public class RecipeDao {
 	
 	public Recipes update(Recipes recipe) throws SQLException {
 		String updateRecipe = "UPDATE Recipes SET PostName=?, Description=?, Image=?, Steps=?, CookingTime=?,"
-				+ "CuisineTypeId=?,Ingredientid=? WHERE RecipeId=? ;";
+				+ "CuisineTypeId=?,Ingredients=? WHERE RecipeId=? ;";
 		Connection connection = null;
 		PreparedStatement updateStmt = null;
 		try {
@@ -87,7 +87,7 @@ public class RecipeDao {
 			updateStmt.setString(4, recipe.getStep());
 			updateStmt.setInt(5, recipe.getCookingTime());
 			updateStmt.setInt(6, 0);
-			updateStmt.setString(7, recipe.getIngredientid());
+			updateStmt.setString(7, recipe.getIngredients());
 			updateStmt.setInt(8, recipe.getRecipeId());
 			
 
@@ -129,7 +129,7 @@ public class RecipeDao {
 				int cookTime = results.getInt("CookingTime");
 				Date created = results.getDate("Created");
 				int cuisineTypeId = results.getInt("CuisineTypeId");
-				String ingredients = results.getString("IngredientId");
+				String ingredients = results.getString("Ingredients");
 	
 				Experienced user = experiencedDao.getExperiencedById(userId);
 				CuisineTypes cuisineType = cuisineTypesDao.getCuisineTypesById(cuisineTypeId);
