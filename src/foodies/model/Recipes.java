@@ -11,11 +11,11 @@ public class Recipes {
 	protected int cookingTime;
 	protected Date created;
 	protected CuisineTypes cuisineTypes;
-	protected String ingredientid;    //the ingredientid is a string which is consist of every ingredient's id
-	protected Experienced experienced;
+	protected String ingredients;    //the ingredients is a string which is consist of every ingredient's id
+	protected Users user;
 	
 	public Recipes(int recipeId, String postName, String description, String image, String step, int cookingTime,
-			Date created, CuisineTypes cuisineTypes, String ingredientid, Experienced experienced) {
+			Date created, CuisineTypes cuisineTypes, String ingredients, Users user) {
 		super();
 		this.recipeId = recipeId;
 		this.postName = postName;
@@ -25,8 +25,8 @@ public class Recipes {
 		this.cookingTime = cookingTime;
 		this.created = created;
 		this.cuisineTypes = cuisineTypes;
-		this.ingredientid = ingredientid;
-		this.experienced = experienced;
+		this.ingredients = ingredients;
+		this.user = user;
 	}
 
 	public Recipes(int recipeId) {
@@ -34,7 +34,7 @@ public class Recipes {
 	}
 
 	public Recipes(String postName, String description, String image, String step, int coookingTime, Date created,
-			CuisineTypes cuisineTypes, String ingredientid, Experienced experienced) {
+			CuisineTypes cuisineTypes, String ingredients, Users user) {
 		super();
 		this.postName = postName;
 		this.description = description;
@@ -43,8 +43,8 @@ public class Recipes {
 		this.cookingTime = coookingTime;
 		this.created = created;
 		this.cuisineTypes = cuisineTypes;
-		this.ingredientid = ingredientid;
-		this.experienced = experienced;
+		this.ingredients = ingredients;
+		this.user = user;
 	}
 
 	public int getRecipeId() {
@@ -111,20 +111,20 @@ public class Recipes {
 		this.cuisineTypes = cuisineTypes;
 	}
 
-	public String getIngredientid() {
-		return ingredientid;
+	public String getIngredients() {
+		return ingredients;
 	}
 
-	public void setIngredientid(String ingredientid) {
-		this.ingredientid = ingredientid;
+	public void setIngredients(String ingredients) {
+		this.ingredients = ingredients;
 	}
 
-	public Experienced getExperienced() {
-		return experienced;
+	public Users getUser() {
+		return user;
 	}
 
-	public void setExperienced(Experienced experienced) {
-		this.experienced = experienced;
+	public void setUser(Users user) {
+		this.user = user;
 	}
 
 }
