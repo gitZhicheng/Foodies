@@ -15,6 +15,7 @@
 		<h1>Search for Recipes by Name</h1>
 		<p>
 			<label for="rcpName">RecipeName:&nbsp;</label>
+			<input id="rcpName" name="rcpName" value="${fn:escapeXml(param.rcpName)}" type="text" placeholder="Search Recipes" class="search-query span2">
 		</p>
 		<p>
 			<input type="submit" value="Search">
@@ -29,6 +30,7 @@
                 <th>Description</th>
                 <th>Cooking Time</th>
                 <th>Created At</th>
+                <th>Photo</th>
             </tr>
             <c:forEach items="${recipes}" var="recipe">
                 <tr>
@@ -36,6 +38,7 @@
                     <td><c:out value="${recipe.getDescription()}" /></td>
                     <td><c:out value="${recipe.getCookingTime()}"/></td>
                     <td><fmt:formatDate value="${recipe.getCreated()}" pattern="yyyy-MM-dd"/></td>
+                    <td><img src="${recipe.getImage()}"/></td>
                 </tr>
             </c:forEach>
        </table>

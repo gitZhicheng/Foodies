@@ -15,6 +15,7 @@
 		<h1>Search for Recipes by Name</h1>
 		<p>
 			<label for="rcpName">RecipeName:&nbsp;</label>
+			<input id="rcpName" name="rcpName" value="${fn:escapeXml(param.rcpName)}" type="text" placeholder="Search Recipes" class="search-query span2">
 		</p>
 		<p>
 			<input type="submit" value="Search">

@@ -29,7 +29,7 @@ public class RecipeDao {
 	
 	public Recipes create(Recipes recipe) throws SQLException {
 		String insertRecipes = 
-				"INSERT INTO Recipes(PostName,Description,Image,Steps,CookingTime,Created,CuisineTypeId,Ingredients,UserId)" +
+				"INSERT INTO Recipes(PostName,Description,Image,Steps,CookingTime,Created,CuisineTypeId,Ingredientid,UserId)" +
 						"VALUES(?,?,?,?,?,?,?,?,?);";
 		Connection connection = null;
 		PreparedStatement insertStmt = null;
@@ -47,8 +47,8 @@ public class RecipeDao {
 			insertStmt.setTimestamp(6, new Timestamp(recipe.getCreated().getTime()));
 			//insertStmt.setInt(7, recipe.getCuisineTypes().getCuisineTypeId());
 			insertStmt.setInt(7, 0);
-			insertStmt.setString(8, recipe.getIngredients());
-			insertStmt.setInt(9, recipe.getUser().getUserId());
+			insertStmt.setString(8, recipe.getIngredientid());
+			insertStmt.setInt(9, recipe.getExperienced().getUserId());
 			insertStmt.executeUpdate();
 			
 			resultKey = insertStmt.getGeneratedKeys();
@@ -75,7 +75,7 @@ public class RecipeDao {
 	
 	public Recipes update(Recipes recipe) throws SQLException {
 		String updateRecipe = "UPDATE Recipes SET PostName=?, Description=?, Image=?, Steps=?, CookingTime=?,"
-				+ "CuisineTypeId=?,Ingredients=? WHERE RecipeId=? ;";
+				+ "CuisineTypeId=?,Ingredientid=? WHERE RecipeId=? ;";
 		Connection connection = null;
 		PreparedStatement updateStmt = null;
 		try {
@@ -87,7 +87,7 @@ public class RecipeDao {
 			updateStmt.setString(4, recipe.getStep());
 			updateStmt.setInt(5, recipe.getCookingTime());
 			updateStmt.setInt(6, 0);
-			updateStmt.setString(7, recipe.getIngredients());
+			updateStmt.setString(7, recipe.getIngredientid());
 			updateStmt.setInt(8, recipe.getRecipeId());
 			
 
@@ -129,7 +129,7 @@ public class RecipeDao {
 				int cookTime = results.getInt("CookingTime");
 				Date created = results.getDate("Created");
 				int cuisineTypeId = results.getInt("CuisineTypeId");
-				String ingredients = results.getString("Ingredients");
+				String ingredients = results.getString("IngredientId");
 	
 				Experienced user = experiencedDao.getExperiencedById(userId);
 				CuisineTypes cuisineType = cuisineTypesDao.getCuisineTypesById(cuisineTypeId);
@@ -177,6 +177,53 @@ public class RecipeDao {
 				Date created = results.getDate("Created");
 				int cuisineTypeId = results.getInt("CuisineTypeId");
 				String ingredients = results.getString("IngredientId");
+				 
+				Experienced user = experiencedDao.getExperiencedById(userId);
+				CuisineTypes cuisineType = cuisineTypesDao.getCuisineTypesById(cuisineTypeId);
+				Recipes recipe = new Recipes(recipeId, postName, description, image, steps, cookTime, created, cuisineType, ingredients, user);
+				recipes.add(recipe);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		return recipes;
+	}
+	
+	public List<Recipes> getRecipesByName(String rcpName) throws SQLException{
+		List<Recipes> recipes = new ArrayList<Recipes>();
+		String selectRecipes = "SELECT * FROM Recipes WHERE PostName like ?" + "LIMIT 10;";
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		try {
+			ExperiencedDao experiencedDao = ExperiencedDao.getInstance();
+			CuisineTypesDao cuisineTypesDao = CuisineTypesDao.getInstance();
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectRecipes);
+			selectStmt.setString(1, "%" + rcpName + "%");
+			results = selectStmt.executeQuery();
+			while(results.next()) {
+				int recipeId = results.getInt("RecipeId");
+				String postName = results.getString("PostName");
+				String description = results.getString("Description");
+				String image = results.getString("Image");
+				String steps = results.getString("Steps");
+				int cookTime = results.getInt("CookingTime");
+				Date created = results.getDate("Created");
+				int cuisineTypeId = results.getInt("CuisineTypeId");
+				String ingredients = results.getString("IngredientId");
+				int userId = results.getInt("UserId");
 				 
 				Experienced user = experiencedDao.getExperiencedById(userId);
 				CuisineTypes cuisineType = cuisineTypesDao.getCuisineTypesById(cuisineTypeId);

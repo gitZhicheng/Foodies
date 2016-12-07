@@ -51,7 +51,7 @@ public class FindRecipeByName extends HttpServlet{
 	        }
 			request.setAttribute("rcpName", stringrcpName);
 			request.setAttribute("recipes", recipes);
-			request.getRequestDispatcher("RecipeResult.jsp").forward(request, response);
+			request.getRequestDispatcher("list-view.jsp").forward(request, response);
 		}
 
 		@Override
