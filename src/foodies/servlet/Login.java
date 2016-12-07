@@ -54,7 +54,8 @@ public class Login extends HttpServlet {
 			out.write("failure");
 		}
 		else {
-			request.getSession().setAttribute("username", username);
+			request.getSession().setAttribute("user", user);
+			System.out.println(request.getSession().getAttribute("user").getClass());
 			out.write("success");
 			//request.getRequestDispatcher("index.jsp").forward(request, response);
 		}

@@ -129,11 +129,11 @@ public class RecipeDao {
 				int cookTime = results.getInt("CookingTime");
 				Date created = results.getDate("Created");
 				int cuisineTypeId = results.getInt("CuisineTypeId");
-				String ingredientId = results.getString("IngredientId");
+				String ingredients = results.getString("Ingredients");
 	
 				Experienced user = experiencedDao.getExperiencedById(userId);
 				CuisineTypes cuisineType = cuisineTypesDao.getCuisineTypesById(cuisineTypeId);
-				Recipes recipe = new Recipes(recipeId, postName, description, image, steps, cookTime, created, cuisineType, ingredientId, user);
+				Recipes recipe = new Recipes(recipeId, postName, description, image, steps, cookTime, created, cuisineType, ingredients, user);
 				
 				return recipe;
 			}
@@ -176,11 +176,11 @@ public class RecipeDao {
 				int cookTime = results.getInt("CookingTime");
 				Date created = results.getDate("Created");
 				int cuisineTypeId = results.getInt("CuisineTypeId");
-				String ingredientId = results.getString("IngredientId");
+				String ingredients = results.getString("IngredientId");
 				 
 				Experienced user = experiencedDao.getExperiencedById(userId);
 				CuisineTypes cuisineType = cuisineTypesDao.getCuisineTypesById(cuisineTypeId);
-				Recipes recipe = new Recipes(recipeId, postName, description, image, steps, cookTime, created, cuisineType, ingredientId, user);
+				Recipes recipe = new Recipes(recipeId, postName, description, image, steps, cookTime, created, cuisineType, ingredients, user);
 				recipes.add(recipe);
 			}
 		} catch (SQLException e) {
@@ -230,12 +230,12 @@ public class RecipeDao {
 				int cookTime = results.getInt("CookingTime");
 				Date created = results.getDate("Created");
 				String cuisineTypeId = results.getString("CuisineTypeId");
-				String ingredientId = results.getString("IngredientId");
+				String ingredients = results.getString("IngredientId");
 				int userId = results.getInt("UserId");
 				 
 				Experienced user = experiencedDao.getExperiencedById(userId);
 				CuisineTypes cuisineType = cuisineTypesDao.getCuisineTypesById(Integer.parseInt(cuisineTypeId));
-				Recipes recipe = new Recipes(recipeId, postName, description, image, steps, cookTime, created, cuisineType, ingredientId, user);
+				Recipes recipe = new Recipes(recipeId, postName, description, image, steps, cookTime, created, cuisineType, ingredients, user);
 				recipes.add(recipe);
 			}
 		} catch (SQLException e) {

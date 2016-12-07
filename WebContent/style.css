@@ -112,3 +112,17 @@ hr.soften {margin: 8px 0;background: #DDD;}
 .gotop:hover {color: #fff;text-decoration: none;-moz-border-radius: 10px;-webkit-border-radius: 10px;border-radius: 10px;}
 #gototop{margin-top:1px;}
 #footerMenu a{ font-size:12px; text-transform:lowercase}
+.recipe{font-family:"Source Sans Pro"}
+.recipe-title{text-align:center;color:#333333;font-size:22px;line-height:28px;font-weight: normal;}
+.rating{text-align:center;color:#ff7e1a;font-size:16px;}
+.recipe-image img{min-width: 500px;max-height: 420px}
+.recipe-desc{margin:20px 10px;font-size:14px}
+.recipe-desc p{margin-top:10px}
+.recipe-desc a{color:#333333}
+.btn-block + .btn-block{margin-top:0}
+.recipe-navbar{padding-top:20px}
+.recipe-navbar .shopBtn{margin:0 5px;width:23%}
+.recipe-info{color:#4d4d4d;margin-right:30px;}
+.recipe-info li{padding:10px 0}
+.recipe-info-header{margin-top:20px;padding-bottom:10px;font-weight: normal;border-bottom:1px solid #e6e6e6}
+.cuisinetype a{color:#777777}
