@@ -97,4 +97,38 @@ public class PostsDao {
 		}
 	}
 
+	public int getCntByRecipeId(int recipeId) throws SQLException {
+		String selectCnt = "SELECT COUNT(*) AS CNT FROM Posts WHERE RecipeId=?";
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		
+		try {
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectCnt);
+			selectStmt.setInt(1, recipeId);
+			results = selectStmt.executeQuery();
+			
+			int cnt = 0;
+			if(results.next()) {
+				cnt = results.getInt("CNT");
+			}
+			
+			return cnt;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+	}
 }

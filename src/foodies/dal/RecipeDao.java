@@ -30,7 +30,7 @@ public class RecipeDao {
 	
 	public Recipes create(Recipes recipe) throws SQLException {
 		String insertRecipes = 
-				"INSERT INTO Recipes(PostName,Description,Image,Steps,CookingTime,Created,CuisineTypeId,Ingredientid,UserId)" +
+				"INSERT INTO Recipes(PostName,Description,Image,Steps,CookingTime,Created,CuisineTypeId,Ingredients,UserId)" +
 						"VALUES(?,?,?,?,?,?,?,?,?);";
 		Connection connection = null;
 		PreparedStatement insertStmt = null;
@@ -130,7 +130,7 @@ public class RecipeDao {
 				int cookTime = results.getInt("CookingTime");
 				Date created = results.getDate("Created");
 				int cuisineTypeId = results.getInt("CuisineTypeId");
-				String ingredients = results.getString("IngredientId");
+				String ingredients = results.getString("Ingredients");
 	
 				Users user = userDao.getUserById(userId);
 				CuisineTypes cuisineType = cuisineTypesDao.getCuisineTypesById(cuisineTypeId);
@@ -177,7 +177,7 @@ public class RecipeDao {
 				int cookTime = results.getInt("CookingTime");
 				Date created = results.getDate("Created");
 				int cuisineTypeId = results.getInt("CuisineTypeId");
-				String ingredients = results.getString("IngredientId");
+				String ingredients = results.getString("Ingredients");
 				 
 				Users user = userDao.getUserById(userId);
 				CuisineTypes cuisineType = cuisineTypesDao.getCuisineTypesById(cuisineTypeId);
@@ -223,7 +223,7 @@ public class RecipeDao {
 				int cookTime = results.getInt("CookingTime");
 				Date created = results.getDate("Created");
 				int cuisineTypeId = results.getInt("CuisineTypeId");
-				String ingredients = results.getString("IngredientId");
+				String ingredients = results.getString("Ingredients");
 				int userId = results.getInt("UserId");
 				 
 				Users user = userDao.getUserById(userId);
@@ -278,7 +278,7 @@ public class RecipeDao {
 				int cookTime = results.getInt("CookingTime");
 				Date created = results.getDate("Created");
 				String cuisineTypeId = results.getString("CuisineTypeId");
-				String ingredients = results.getString("IngredientId");
+				String ingredients = results.getString("Ingredients");
 				int userId = results.getInt("UserId");
 				 
 				Users user = userDao.getUserById(userId);

@@ -169,7 +169,7 @@ Navigation Bar Section
   <div class="span12">
   	<ul class="breadcrumb cuisinetype">
   	  <li>
-  	    <a href="#">Home</a>
+  	    <a href="index.jsp">Home</a>
   	  </li>
   	  <c:forEach items="${cuisineNames}" var="cn">
   	  	<li>
@@ -183,8 +183,8 @@ Navigation Bar Section
   		<div class="span5">
   			<h2 class="recipe-title">${recipe.postName}</h2>
   			<div class="rating">
-  			  <p>Stars : 4.0 out of 5</p>
-  			  <p>113 reviews | 56 made it</p>
+  			  <p>Stars : ${avgRating} out of 5</p>
+  			  <p><span><a>${reviewCnt} reviews</a></span> | <span><a>${postCnt} made it</a></span></p>
   			</div>
   			<div class="recipe-desc">
   			  <span>Recipe by : <a>${recipe.user==null? "Anonymous":recipe.user.userName}</a></span>
