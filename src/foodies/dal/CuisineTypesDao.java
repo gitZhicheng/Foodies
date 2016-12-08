@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import foodies.model.*;
 
@@ -25,7 +27,7 @@ public class CuisineTypesDao {
 	}
 	
 	public CuisineTypes create(CuisineTypes cuisineType) throws SQLException {
-		String insertCuisineType = "INSERT INTO CuisineTypes(CuisineTypeName,ParentId,ParentIds) VALUES(?,?,?);";
+		String insertCuisineType = "INSERT INTO CuisineTypes(Name,ParentId,ParentIds) VALUES(?,?,?);";
 		Connection connection = null;
 		PreparedStatement insertStmt = null;
 		ResultSet resultKey = null;
@@ -102,7 +104,7 @@ public class CuisineTypesDao {
 
 			if(results.next()) {
 				int resultCuisineId = results.getInt("CuisineTypeId");
-				String cuisineTypeName = results.getString("CuisineTypeName");
+				String cuisineTypeName = results.getString("Name");
 				int parentId = results.getInt("ParentId");
 				String parentIds = results.getString("ParentIds");
 
@@ -124,6 +126,46 @@ public class CuisineTypesDao {
 			}
 		}
 		return null;
+	}
+	
+	public List<CuisineTypes> getCuisineTypesOrderByCreated() throws SQLException {
+		List<CuisineTypes> cuisineTypes = new ArrayList<CuisineTypes>();
+		String selectCuisineType = "SELECT * FROM CuisineTypes "
+									+ "WHERE CuisineTypes.Name != 'recipes' "
+									+ "ORDER BY CuisineTypeId LIMIT 10; ";
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		try {
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectCuisineType);
+
+			results = selectStmt.executeQuery();
+
+			while(results.next()) {
+				int resultCuisineId = results.getInt("CuisineTypeId");
+				String cuisineTypeName = results.getString("Name");
+				int parentId = results.getInt("ParentId");
+				String parentIds = results.getString("ParentIds");
+
+				CuisineTypes cuisineType = new CuisineTypes(resultCuisineId, cuisineTypeName, parentId, parentIds);
+				cuisineTypes.add(cuisineType);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		return cuisineTypes;
 	}
 
 }
