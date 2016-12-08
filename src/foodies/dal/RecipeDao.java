@@ -201,9 +201,9 @@ public class RecipeDao {
 		return recipes;
 	}
 	
-	public List<Recipes> getRecipesByName(String rcpName) throws SQLException{
+	public List<Recipes> getRecipesByNameOrderByCreated(String rcpName) throws SQLException{
 		List<Recipes> recipes = new ArrayList<Recipes>();
-		String selectRecipes = "SELECT * FROM Recipes WHERE PostName like ?" + "LIMIT 10;";
+		String selectRecipes = "SELECT * FROM Recipes WHERE PostName like ?" + " ORDER BY Created DESC LIMIT 10;";
 		Connection connection = null;
 		PreparedStatement selectStmt = null;
 		ResultSet results = null;
@@ -248,17 +248,19 @@ public class RecipeDao {
 		return recipes;
 	}
 	
-	public List<Recipes> getRecipesByUserName(String userName) throws SQLException{
-		UsersDao userDao = UsersDao.getInstance();
-		Users user = userDao.getUserByUserName(userName);
-		int id = user.getUserId();
-		return getRecipesByUserId(id);
-	}
-
-		
-	public List<Recipes> getRecipesByCuisine(CuisineTypes cuisine) throws SQLException{
+	public List<Recipes> getRecipesByNameOrderByRating(String rcpName) throws SQLException{
 		List<Recipes> recipes = new ArrayList<Recipes>();
-		String selectCreditcards = "SELECT * FROM Recipes WHERE CuisineTypeId=?;";
+		String selectRecipes = "SELECT Recipes.* "
+								+ "FROM ("
+								+ "SELECT RecipeId, AVG(Rating) AS AVG_RATING "
+								+ "FROM Reviews "
+								+ "GROUP BY RecipeId "
+								+ "ORDER BY AVG_RATING DESC) AS REV "
+								+ "INNER JOIN Recipes "
+								+ "ON REV.RecipeId = Recipes.RecipeId "
+								+ "WHERE Recipes.PostName like ? "
+								+ "LIMIT 20";		
+		
 		Connection connection = null;
 		PreparedStatement selectStmt = null;
 		ResultSet results = null;
@@ -266,8 +268,8 @@ public class RecipeDao {
 			UsersDao userDao = UsersDao.getInstance();
 			CuisineTypesDao cuisineTypesDao = CuisineTypesDao.getInstance();
 			connection = connectionManager.getConnection();
-			selectStmt = connection.prepareStatement(selectCreditcards);
-			selectStmt.setInt(1, cuisine.getCuisineTypeId());
+			selectStmt = connection.prepareStatement(selectRecipes);
+			selectStmt.setString(1, "%" + rcpName + "%");
 			results = selectStmt.executeQuery();
 			while(results.next()) {
 				int recipeId = results.getInt("RecipeId");
@@ -277,12 +279,236 @@ public class RecipeDao {
 				String steps = results.getString("Steps");
 				int cookTime = results.getInt("CookingTime");
 				Date created = results.getDate("Created");
-				String cuisineTypeId = results.getString("CuisineTypeId");
+				int cuisineTypeId = results.getInt("CuisineTypeId");
 				String ingredients = results.getString("Ingredients");
 				int userId = results.getInt("UserId");
 				 
 				Users user = userDao.getUserById(userId);
-				CuisineTypes cuisineType = cuisineTypesDao.getCuisineTypesById(Integer.parseInt(cuisineTypeId));
+				CuisineTypes cuisineType = cuisineTypesDao.getCuisineTypesById(cuisineTypeId);
+				Recipes recipe = new Recipes(recipeId, postName, description, image, steps, cookTime, created, cuisineType, ingredients, user);
+				recipes.add(recipe);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		return recipes;
+	}
+	
+	public List<Recipes> getRecipesByNameOrderByPopular(String rcpName) throws SQLException{
+		List<Recipes> recipes = new ArrayList<Recipes>();
+		String selectRecipes = "SELECT Recipes.* "
+								+ "FROM ("
+								+ "SELECT RecipeId, COUNT(*) AS CNT "
+								+ "FROM Posts "
+								+ "GROUP BY RecipeId "
+								+ "ORDER BY CNT DESC) AS POST "
+								+ "INNER JOIN Recipes "
+								+ "ON POST.RecipeId = Recipes.RecipeId "
+								+ "WHERE Recipes.PostName like ? "
+								+ "LIMIT 20";		
+		
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		try {
+			UsersDao userDao = UsersDao.getInstance();
+			CuisineTypesDao cuisineTypesDao = CuisineTypesDao.getInstance();
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectRecipes);
+			selectStmt.setString(1, "%" + rcpName + "%");
+			results = selectStmt.executeQuery();
+			while(results.next()) {
+				int recipeId = results.getInt("RecipeId");
+				String postName = results.getString("PostName");
+				String description = results.getString("Description");
+				String image = results.getString("Image");
+				String steps = results.getString("Steps");
+				int cookTime = results.getInt("CookingTime");
+				Date created = results.getDate("Created");
+				int cuisineTypeId = results.getInt("CuisineTypeId");
+				String ingredients = results.getString("Ingredients");
+				int userId = results.getInt("UserId");
+				 
+				Users user = userDao.getUserById(userId);
+				CuisineTypes cuisineType = cuisineTypesDao.getCuisineTypesById(cuisineTypeId);
+				Recipes recipe = new Recipes(recipeId, postName, description, image, steps, cookTime, created, cuisineType, ingredients, user);
+				recipes.add(recipe);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		return recipes;
+	}
+	
+	
+	
+	
+	public List<Recipes> getRecipesByUserName(String userName) throws SQLException{
+		UsersDao userDao = UsersDao.getInstance();
+		Users user = userDao.getUserByUserName(userName);
+		int id = user.getUserId();
+		return getRecipesByUserId(id);
+	}
+
+		
+	public List<Recipes> getRecipesByCuisineOrderByCreated(int cuisineId) throws SQLException{
+		List<Recipes> recipes = new ArrayList<Recipes>();
+		String selectCreditcards = "SELECT * FROM Recipes WHERE CuisineTypeId=?" + " ORDER BY Created DESC LIMIT 10;";
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		try {
+			UsersDao userDao = UsersDao.getInstance();
+			CuisineTypesDao cuisineTypesDao = CuisineTypesDao.getInstance();
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectCreditcards);
+			selectStmt.setInt(1, cuisineId);
+			results = selectStmt.executeQuery();
+			while(results.next()) {
+				int recipeId = results.getInt("RecipeId");
+				String postName = results.getString("PostName");
+				String description = results.getString("Description");
+				String image = results.getString("Image");
+				String steps = results.getString("Steps");
+				int cookTime = results.getInt("CookingTime");
+				Date created = results.getDate("Created");
+				String ingredients = results.getString("Ingredients");
+				int userId = results.getInt("UserId");
+				 
+				Users user = userDao.getUserById(userId);
+				CuisineTypes cuisineType = cuisineTypesDao.getCuisineTypesById(cuisineId);
+				Recipes recipe = new Recipes(recipeId, postName, description, image, steps, cookTime, created, cuisineType, ingredients, user);
+				recipes.add(recipe);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		return recipes;
+	}
+	
+	public List<Recipes> getRecipesByCuisineOrderByRating(int cuisineId) throws SQLException{
+		List<Recipes> recipes = new ArrayList<Recipes>();
+		String selectCreditcards = "SELECT Recipes.* "
+									+ "FROM ("
+									+ "SELECT RecipeId, AVG(Rating) AS AVG_RATING "
+									+ "FROM Reviews "
+									+ "GROUP BY RecipeId "
+									+ "ORDER BY AVG_RATING DESC) AS REV "
+									+ "INNER JOIN Recipes "
+									+ "ON REV.RecipeId = Recipes.RecipeId "
+									+ "WHERE Recipes.CuisineTypeId=? "
+									+ "LIMIT 20";	
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		try {
+			UsersDao userDao = UsersDao.getInstance();
+			CuisineTypesDao cuisineTypesDao = CuisineTypesDao.getInstance();
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectCreditcards);
+			selectStmt.setInt(1, cuisineId);
+			results = selectStmt.executeQuery();
+			while(results.next()) {
+				int recipeId = results.getInt("RecipeId");
+				String postName = results.getString("PostName");
+				String description = results.getString("Description");
+				String image = results.getString("Image");
+				String steps = results.getString("Steps");
+				int cookTime = results.getInt("CookingTime");
+				Date created = results.getDate("Created");
+				String ingredients = results.getString("Ingredients");
+				int userId = results.getInt("UserId");
+				 
+				Users user = userDao.getUserById(userId);
+				CuisineTypes cuisineType = cuisineTypesDao.getCuisineTypesById(cuisineId);
+				Recipes recipe = new Recipes(recipeId, postName, description, image, steps, cookTime, created, cuisineType, ingredients, user);
+				recipes.add(recipe);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		return recipes;
+	}
+	
+	public List<Recipes> getRecipesByCuisineOrderByPopular(int cuisineId) throws SQLException{
+		List<Recipes> recipes = new ArrayList<Recipes>();
+		String selectCreditcards = "SELECT Recipes.* "
+									+ "FROM ("
+									+ "SELECT RecipeId, COUNT(*) AS CNT "
+									+ "FROM Posts "
+									+ "GROUP BY RecipeId "
+									+ "ORDER BY CNT DESC) AS POST "
+									+ "INNER JOIN Recipes "
+									+ "ON POST.RecipeId = Recipes.RecipeId "
+									+ "WHERE Recipes.CuisineTypeId=? "
+									+ "LIMIT 20";	
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		try {
+			UsersDao userDao = UsersDao.getInstance();
+			CuisineTypesDao cuisineTypesDao = CuisineTypesDao.getInstance();
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectCreditcards);
+			selectStmt.setInt(1, cuisineId);
+			results = selectStmt.executeQuery();
+			while(results.next()) {
+				int recipeId = results.getInt("RecipeId");
+				String postName = results.getString("PostName");
+				String description = results.getString("Description");
+				String image = results.getString("Image");
+				String steps = results.getString("Steps");
+				int cookTime = results.getInt("CookingTime");
+				Date created = results.getDate("Created");
+				String ingredients = results.getString("Ingredients");
+				int userId = results.getInt("UserId");
+				 
+				Users user = userDao.getUserById(userId);
+				CuisineTypes cuisineType = cuisineTypesDao.getCuisineTypesById(cuisineId);
 				Recipes recipe = new Recipes(recipeId, postName, description, image, steps, cookTime, created, cuisineType, ingredients, user);
 				recipes.add(recipe);
 			}
