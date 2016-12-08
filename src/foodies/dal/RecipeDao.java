@@ -17,6 +17,7 @@ public class RecipeDao {
 	
 	// Single pattern: instantiation is limited to one object.
 	private static RecipeDao instance = null;
+	
 	protected RecipeDao() {
 		connectionManager = new ConnectionManager();
 	}
@@ -113,7 +114,7 @@ public class RecipeDao {
 		PreparedStatement selectStmt = null;
 		ResultSet results = null;
 		try {
-			ExperiencedDao experiencedDao = ExperiencedDao.getInstance();
+			UsersDao userDao = UsersDao.getInstance();
 			CuisineTypesDao cuisineTypesDao = CuisineTypesDao.getInstance();
 			connection = connectionManager.getConnection();
 			selectStmt = connection.prepareStatement(selectRecipes);
@@ -131,7 +132,7 @@ public class RecipeDao {
 				int cuisineTypeId = results.getInt("CuisineTypeId");
 				String ingredients = results.getString("IngredientId");
 	
-				Experienced user = experiencedDao.getExperiencedById(userId);
+				Users user = userDao.getUserById(userId);
 				CuisineTypes cuisineType = cuisineTypesDao.getCuisineTypesById(cuisineTypeId);
 				Recipes recipe = new Recipes(recipeId, postName, description, image, steps, cookTime, created, cuisineType, ingredients, user);
 				
@@ -161,7 +162,7 @@ public class RecipeDao {
 		PreparedStatement selectStmt = null;
 		ResultSet results = null;
 		try {
-			ExperiencedDao experiencedDao = ExperiencedDao.getInstance();
+			UsersDao userDao = UsersDao.getInstance();
 			CuisineTypesDao cuisineTypesDao = CuisineTypesDao.getInstance();
 			connection = connectionManager.getConnection();
 			selectStmt = connection.prepareStatement(selectRecipes);
@@ -178,7 +179,7 @@ public class RecipeDao {
 				int cuisineTypeId = results.getInt("CuisineTypeId");
 				String ingredients = results.getString("IngredientId");
 				 
-				Experienced user = experiencedDao.getExperiencedById(userId);
+				Users user = userDao.getUserById(userId);
 				CuisineTypes cuisineType = cuisineTypesDao.getCuisineTypesById(cuisineTypeId);
 				Recipes recipe = new Recipes(recipeId, postName, description, image, steps, cookTime, created, cuisineType, ingredients, user);
 				recipes.add(recipe);
@@ -207,7 +208,7 @@ public class RecipeDao {
 		PreparedStatement selectStmt = null;
 		ResultSet results = null;
 		try {
-			ExperiencedDao experiencedDao = ExperiencedDao.getInstance();
+			UsersDao userDao = UsersDao.getInstance();
 			CuisineTypesDao cuisineTypesDao = CuisineTypesDao.getInstance();
 			connection = connectionManager.getConnection();
 			selectStmt = connection.prepareStatement(selectRecipes);
@@ -225,7 +226,7 @@ public class RecipeDao {
 				String ingredients = results.getString("IngredientId");
 				int userId = results.getInt("UserId");
 				 
-				Experienced user = experiencedDao.getExperiencedById(userId);
+				Users user = userDao.getUserById(userId);
 				CuisineTypes cuisineType = cuisineTypesDao.getCuisineTypesById(cuisineTypeId);
 				Recipes recipe = new Recipes(recipeId, postName, description, image, steps, cookTime, created, cuisineType, ingredients, user);
 				recipes.add(recipe);
@@ -248,8 +249,8 @@ public class RecipeDao {
 	}
 	
 	public List<Recipes> getRecipesByUserName(String userName) throws SQLException{
-		ExperiencedDao experiencedDao = ExperiencedDao.getInstance();
-		Experienced user = experiencedDao.getExperiencedByUserName(userName);
+		UsersDao userDao = UsersDao.getInstance();
+		Users user = userDao.getUserByUserName(userName);
 		int id = user.getUserId();
 		return getRecipesByUserId(id);
 	}
@@ -262,7 +263,7 @@ public class RecipeDao {
 		PreparedStatement selectStmt = null;
 		ResultSet results = null;
 		try {
-			ExperiencedDao experiencedDao = ExperiencedDao.getInstance();
+			UsersDao userDao = UsersDao.getInstance();
 			CuisineTypesDao cuisineTypesDao = CuisineTypesDao.getInstance();
 			connection = connectionManager.getConnection();
 			selectStmt = connection.prepareStatement(selectCreditcards);
@@ -280,7 +281,7 @@ public class RecipeDao {
 				String ingredients = results.getString("IngredientId");
 				int userId = results.getInt("UserId");
 				 
-				Experienced user = experiencedDao.getExperiencedById(userId);
+				Users user = userDao.getUserById(userId);
 				CuisineTypes cuisineType = cuisineTypesDao.getCuisineTypesById(Integer.parseInt(cuisineTypeId));
 				Recipes recipe = new Recipes(recipeId, postName, description, image, steps, cookTime, created, cuisineType, ingredients, user);
 				recipes.add(recipe);
