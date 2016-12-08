@@ -2,9 +2,6 @@ package foodies.servlet;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,8 +12,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import foodies.model.Experienced;
-import foodies.dal.ExperiencedDao;
+import foodies.model.Users;
+import foodies.dal.UsersDao;
 import foodies.dal.RecipeDao;
 import foodies.model.*;
 
@@ -27,12 +24,12 @@ import foodies.model.*;
 public class RecipeUpdate extends HttpServlet {
 	
 	protected RecipeDao recipeDao;
-	protected ExperiencedDao experiencedDao;
+	protected UsersDao experiencedDao;
 	
 	@Override
 	public void init() throws ServletException {
 		recipeDao = RecipeDao.getInstance();
-		experiencedDao = ExperiencedDao.getInstance();
+		experiencedDao = UsersDao.getInstance();
 	}
 
 	@Override
@@ -70,10 +67,10 @@ public class RecipeUpdate extends HttpServlet {
         	int cookingTime = Integer.valueOf(request.getParameter("cookingTime"));
         	Date created = null;
         	CuisineTypes type = null;
-        	Experienced exp = null;
+        	Users exp = null;
         	int userId = Integer.valueOf(request.getParameter("userId"));
         	try {
-            	exp = experiencedDao.getExperiencedById(userId);
+            	exp = experiencedDao.getUserById(userId);
             	Recipes recipe = new Recipes(recipeId, recipeName, desc, image, step, cookingTime, 
             			created, type, ingredient, exp);
         		recipe = recipeDao.update(recipe);

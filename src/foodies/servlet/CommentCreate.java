@@ -19,12 +19,12 @@ import foodies.model.*;
 public class CommentCreate extends HttpServlet {
 	
 	protected RecipeDao recipeDao;
-	protected ExperiencedDao experiencedDao;
+	protected UsersDao userDao;
        
 	@Override
 	public void init() throws ServletException {
 		recipeDao = RecipeDao.getInstance();
-		experiencedDao = ExperiencedDao.getInstance();
+		userDao = UsersDao.getInstance();
 	}
 
 	@Override
@@ -54,9 +54,9 @@ public class CommentCreate extends HttpServlet {
         	CuisineTypes type = null;
         	int userId = Integer.valueOf(request.getParameter("userId"));
         	System.out.println("RecipeName: " + recipeName + " UserId: " + userId);
-        	Experienced exp = null;
+        	Users exp = null;
 			try {
-				exp = experiencedDao.getExperiencedById(userId);
+				exp = userDao.getUserById(userId);
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}

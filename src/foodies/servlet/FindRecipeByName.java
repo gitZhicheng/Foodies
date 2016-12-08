@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import foodies.dal.ExperiencedDao;
 import foodies.dal.RecipeDao;
 import foodies.model.Recipes;
 
