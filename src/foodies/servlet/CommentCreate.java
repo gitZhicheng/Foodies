@@ -20,11 +20,14 @@ public class CommentCreate extends HttpServlet {
 	
 	protected RecipeDao recipeDao;
 	protected UsersDao userDao;
-       
+    protected RecipeCommentsDao recipeCommentDao;
+    protected CommentsDao commentDao;
 	@Override
 	public void init() throws ServletException {
 		recipeDao = RecipeDao.getInstance();
 		userDao = UsersDao.getInstance();
+		recipeCommentDao = RecipeCommentsDao.getInstance();
+		commentDao = CommentsDao.getInstance();
 	}
 
 	@Override
@@ -38,33 +41,33 @@ public class CommentCreate extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Map<String, String> messages = new HashMap<String, String>();
         request.setAttribute("messages", messages);
-        
-        String recipeName = request.getParameter("recipeName");
-        System.out.println("RecipeName: " + recipeName);
-        if (recipeName == null || recipeName.trim().isEmpty()) {
-            messages.put("success", "Invalid RecipeName");
+    	String content = request.getParameter("content");
+
+        System.out.println("RecipeName: " + content);
+        if (content == null || content.trim().isEmpty()) {
+            messages.put("failed", "Invalid content");
         }
         else {
-        	String desc = request.getParameter("desc");
-        	String ingredient = request.getParameter("ingredient");
-        	String step = request.getParameter("step");
-        	int cookingTime = Integer.valueOf(request.getParameter("cookingTime"));
         	Date created = new Date();
-        	String image = null;
-        	CuisineTypes type = null;
         	int userId = Integer.valueOf(request.getParameter("userId"));
-        	System.out.println("RecipeName: " + recipeName + " UserId: " + userId);
-        	Users exp = null;
+        	int recipeId = Integer.valueOf(request.getParameter("recipeId"));
+        	Recipes recipe = null;
+        	Users user = null;
 			try {
-				exp = userDao.getUserById(userId);
+	        	user = userDao.getUserById(userId);
+	        	recipe = recipeDao.getRecipeById(recipeId);
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
         	try {
-            	Recipes recipe = new Recipes(recipeName, desc, image, step, cookingTime, created,
-            			type, ingredient, exp);
-        		recipe = recipeDao.create(recipe);
-        		messages.put("success", "Successfully created recipe: " + recipe.getRecipeId());
+
+				Comments comment = new Comments(content,created,user);
+				comment = commentDao.create(comment);
+				RecipeComments recipeComment = new RecipeComments(comment.getCommentId(), content, created, user, recipe);
+
+				recipeCommentDao.create(recipeComment);
+				
+        		messages.put("success", "Successfully created recipe: " + comment.getCommentId());
         	} catch (SQLException e) {
 				e.printStackTrace();
 				throw new IOException(e);

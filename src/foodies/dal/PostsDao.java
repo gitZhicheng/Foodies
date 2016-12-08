@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.Date;
 
 import foodies.model.*;
 
@@ -70,7 +71,51 @@ public class PostsDao {
 		}
 
 	}
+	public Posts getPostByRecipeId(int recipeId) throws SQLException{
+		String selectRecipes = "SELECT * FROM Posts WHERE RecipeId=?;";
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		try {
+			UsersDao userDao = UsersDao.getInstance();
+			RecipeDao recipeDao = RecipeDao.getInstance();
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectRecipes);
+			selectStmt.setInt(1, recipeId);
+			results = selectStmt.executeQuery();
+			
+			if(results.next()) {
+				int userId = results.getInt("UserId");
+				int postId = results.getInt("PostId");
+				String title = results.getString("Title");
+				String content = results.getString("Content");
+				String image = results.getString("Image");
 
+				Date created = results.getDate("Created");
+	
+				Users user = userDao.getUserById(userId);
+				Recipes recipe = recipeDao.getRecipeById(recipeId);
+
+				Posts post = new Posts(postId, title, content, image, user, created, recipe);
+				
+				return post;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		return null;
+	}
 	public Posts delete(Posts post) throws SQLException {
 
 		String deletePost = "DELETE FROM Posts WHERE PostId=?;";

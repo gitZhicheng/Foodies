@@ -1,8 +1,13 @@
 package foodies.dal;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import foodies.model.*;
 
@@ -76,6 +81,136 @@ public class RecipeCommentsDao extends CommentsDao{
 	}
 	
 	
+	public List<RecipeComments> getCommentsByUserId(int userId) throws SQLException{
+		List<RecipeComments> comments = new ArrayList<RecipeComments>();
+		String selectComments = "SELECT * FROM Comments INNER JOIN RecipeComments ON"
+				+ " Comments.CommentID = RecipeComments.CommentID WHERE UserId=?;";
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		try {
+			UsersDao usersDao = UsersDao.getInstance();
+			RecipeDao recipesDao = RecipeDao.getInstance();
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectComments);
+			selectStmt.setInt(1, userId);
+			results = selectStmt.executeQuery();
+			while(results.next()) {
+				Users user = usersDao.getUserById(userId);
+				int commentId = results.getInt("CommentId");
+				int recipeId = results.getInt("RecipeId");
+				String content = results.getString("Content");
+				Date created = results.getDate("Created");
+
+				Recipes recipe = recipesDao.getRecipeById(recipeId);
+				
+				RecipeComments comment = new RecipeComments(commentId, content, created, user, recipe);
+				comments.add(comment);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		return comments;
+	}
 	
+	public List<RecipeComments> getCommentsByRecipeId(int recipeId) throws SQLException{
+		List<RecipeComments> comments = new ArrayList<RecipeComments>();
+		String selectComments = "SELECT * FROM Comments INNER JOIN RecipeComments ON"
+				+ " Comments.CommentID = RecipeComments.CommentID WHERE RecipeId=?;";
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		try {
+			UsersDao usersDao = UsersDao.getInstance();
+			RecipeDao recipesDao = RecipeDao.getInstance();
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectComments);
+			selectStmt.setInt(1, recipeId);
+			results = selectStmt.executeQuery();
+			while(results.next()) {
+				int commentId = results.getInt("CommentId");
+				int userId = results.getInt("userId");
+				Users user = usersDao.getUserById(userId);
+
+				String content = results.getString("Content");
+				Date created = results.getDate("Created");
+
+				Recipes recipe = recipesDao.getRecipeById(recipeId);
+				
+				RecipeComments comment = new RecipeComments(commentId, content, created, user, recipe);
+				comments.add(comment);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		return comments;
+	}
+	
+	public RecipeComments getCommentById(int commentId) throws SQLException{
+		String selectComments = "SELECT * FROM Comments INNER JOIN RecipeComments ON"
+				+ " Comments.CommentID = RecipeComments.CommentID WHERE RecipeId=?;";
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		
+		try {
+			UsersDao usersDao = UsersDao.getInstance();
+			RecipeDao recipesDao = RecipeDao.getInstance();
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectComments);
+			selectStmt.setInt(1, commentId);
+			results = selectStmt.executeQuery();
+			
+			if(results.next()) {
+				int userId = results.getInt("userId");
+				Users user = usersDao.getUserById(userId);
+
+				String content = results.getString("Content");
+				Date created = results.getDate("Created");
+				int recipeId = results.getInt("RecipeId");
+
+				Recipes recipe = recipesDao.getRecipeById(recipeId);
+				
+				RecipeComments comment = new RecipeComments(commentId, content, created, user, recipe);
+				return comment;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		return null;
+	}
 
 }

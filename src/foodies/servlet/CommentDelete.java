@@ -11,7 +11,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import foodies.dal.CommentsDao;
+import foodies.dal.RecipeCommentsDao;
 import foodies.dal.RecipeDao;
+import foodies.dal.UsersDao;
 import foodies.model.*;
 
 /**
@@ -21,9 +24,15 @@ import foodies.model.*;
 public class CommentDelete extends HttpServlet {
 
 	protected RecipeDao recipeDao;
-	
+    protected RecipeCommentsDao recipeCommentDao;
+    protected CommentsDao commentDao;
+    protected UsersDao userDao;
+    
 	public void init() throws ServletException {
 		recipeDao = RecipeDao.getInstance();
+		userDao = UsersDao.getInstance();
+		recipeCommentDao = RecipeCommentsDao.getInstance();
+		commentDao = CommentsDao.getInstance();
 	}
 
 	@Override
@@ -31,11 +40,11 @@ public class CommentDelete extends HttpServlet {
 		Map<String, String> messages = new HashMap<String, String>();
         request.setAttribute("messages", messages);
         
-		int recipeId = Integer.valueOf(request.getParameter("recipeId"));
+		int commentId = Integer.valueOf(request.getParameter("commentId"));
 		try {
-			Recipes recipe = recipeDao.getRecipeById(recipeId);
-			recipeDao.delete(recipe);
-			messages.put("success", "Successfully deleted recipe: " + recipeId);
+			RecipeComments recipeComment = recipeCommentDao.getCommentById(commentId);
+			recipeCommentDao.delete(recipeComment);
+			messages.put("success", "Successfully deleted comment: " + commentId);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new IOException(e);

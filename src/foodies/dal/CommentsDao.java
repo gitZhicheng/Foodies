@@ -1,11 +1,15 @@
 package foodies.dal;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import foodies.model.*;
 
@@ -68,6 +72,7 @@ public class CommentsDao {
 				
 	}
 	
+	
 	public Comments delete(Comments comment) throws SQLException {
 		
 		String deleteComment = "DELETE FROM Comments WHERE CommentId=?;";
@@ -79,7 +84,7 @@ public class CommentsDao {
 			deleteStmt.setInt(1, comment.getCommentId());
 			deleteStmt.executeUpdate();
 
-			// Return null so the caller can no longer operate on the BlogPosts instance.
+			// Return null so the caller can no longer operate on the BlogComments instance.
 			return null;
 		} catch (SQLException e) {
 			e.printStackTrace();
