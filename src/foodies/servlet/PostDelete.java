@@ -11,19 +11,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import foodies.dal.RecipeDao;
+import foodies.dal.PostsDao;
 import foodies.model.*;
 
 /**
- * Servlet implementation class RecipeDelete
+ * Servlet implementation class PostDelete
  */
 @WebServlet("/PostDelete")
 public class PostDelete extends HttpServlet {
 
-	protected RecipeDao recipeDao;
+	protected PostsDao postDao;
 	
 	public void init() throws ServletException {
-		recipeDao = RecipeDao.getInstance();
+		postDao = PostsDao.getInstance();
 	}
 
 	@Override
@@ -31,17 +31,17 @@ public class PostDelete extends HttpServlet {
 		Map<String, String> messages = new HashMap<String, String>();
         request.setAttribute("messages", messages);
         
-		int recipeId = Integer.valueOf(request.getParameter("recipeId"));
+		int postId = Integer.valueOf(request.getParameter("postId"));
 		try {
-			Recipes recipe = recipeDao.getRecipeById(recipeId);
-			recipeDao.delete(recipe);
-			messages.put("success", "Successfully deleted recipe: " + recipeId);
+			Posts post = postDao.getPostByPostId(postId);
+			postDao.delete(post);
+			messages.put("success", "Successfully deleted post: " + postId);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new IOException(e);
         }
 		
-		request.getRequestDispatcher("findRecipes.jsp").forward(request, response);
+		request.getRequestDispatcher("findPosts.jsp").forward(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

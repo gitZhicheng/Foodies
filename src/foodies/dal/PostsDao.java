@@ -1,5 +1,6 @@
 package foodies.dal;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -116,6 +117,53 @@ public class PostsDao {
 		}
 		return null;
 	}
+	
+	public Posts getPostByPostId(int postId) throws SQLException{
+		String selectPosts = "SELECT * FROM Posts WHERE PostId=?;";
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		
+		try {
+			UsersDao usersDao = UsersDao.getInstance();
+			RecipeDao recipesDao = RecipeDao.getInstance();
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectPosts);
+			selectStmt.setInt(1, postId);
+			results = selectStmt.executeQuery();
+			
+			if(results.next()) {
+				int userId = results.getInt("UserId");
+				int recipeId = results.getInt("RecipeId");
+				String title = results.getString("Title");
+				String content = results.getString("Content");
+				String image = results.getString("Image");
+
+				Date created = results.getDate("Created");
+	
+				Users user = usersDao.getUserById(userId);
+				Recipes recipe = recipesDao.getRecipeById(recipeId);
+
+				Posts post = new Posts(postId, title, content, image, user, created, recipe);
+				
+				return post;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		return null;
+	}
 	public Posts delete(Posts post) throws SQLException {
 
 		String deletePost = "DELETE FROM Posts WHERE PostId=?;";
@@ -142,6 +190,36 @@ public class PostsDao {
 		}
 	}
 
+	public Posts update(Posts post) throws SQLException {
+		String updatePost = "UPDATE Post SET Title=?,Content=?,Image=? WHERE PostId=? ;";
+		Connection connection = null;
+		PreparedStatement updateStmt = null;
+		try {
+			connection = connectionManager.getConnection();
+			updateStmt = connection.prepareStatement(updatePost);
+			updateStmt.setString(1, post.getTitle());
+			updateStmt.setString(2, post.getContent());
+			updateStmt.setString(3, post.getImage());
+			updateStmt.setInt(4, post.getPostId());
+			
+
+			updateStmt.executeUpdate();
+
+			// Return null so the caller can no longer operate on the Persons instance.
+			return null;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(updateStmt != null) {
+				updateStmt.close();
+			}
+		}
+	}
+	
 	public int getCntByRecipeId(int recipeId) throws SQLException {
 		String selectCnt = "SELECT COUNT(*) AS CNT FROM Posts WHERE RecipeId=?";
 		Connection connection = null;

@@ -18,20 +18,21 @@ import foodies.model.*;
 @WebServlet("/PostCreate")
 public class PostCreate extends HttpServlet {
 	
-	protected RecipeDao recipeDao;
+	protected PostsDao postDao;
 	protected UsersDao userDao;
-       
+    protected RecipeDao recipeDao;
 	@Override
 	public void init() throws ServletException {
-		recipeDao = RecipeDao.getInstance();
+		postDao = PostsDao.getInstance();
 		userDao = UsersDao.getInstance();
+		recipeDao = RecipeDao.getInstance();
 	}
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Map<String, String> messages = new HashMap<String, String>();
         request.setAttribute("messages", messages);
-        request.getRequestDispatcher("/recipeCreate.jsp").forward(request, response);
+        request.getRequestDispatcher("/postCreate.jsp").forward(request, response);
 	}
 
 	@Override
@@ -39,39 +40,33 @@ public class PostCreate extends HttpServlet {
 		Map<String, String> messages = new HashMap<String, String>();
         request.setAttribute("messages", messages);
         
-        String recipeName = request.getParameter("recipeName");
-        System.out.println("RecipeName: " + recipeName);
-        if (recipeName == null || recipeName.trim().isEmpty()) {
-            messages.put("success", "Invalid RecipeName");
+        String title = request.getParameter("title");
+        System.out.println("PostName: " + title);
+        if (title == null || title.trim().isEmpty()) {
+            messages.put("success", "Invalid PostName");
         }
         else {
-        	String desc = request.getParameter("desc");
-        	String ingredient = request.getParameter("ingredient");
-        	String step = request.getParameter("step");
-        	int cookingTime = Integer.valueOf(request.getParameter("cookingTime"));
+        	String content = request.getParameter("content");
+        	int recipeId = Integer.valueOf(request.getParameter("recipeId"));
         	Date created = new Date();
         	String image = null;
-        	CuisineTypes type = null;
         	int userId = Integer.valueOf(request.getParameter("userId"));
-        	System.out.println("RecipeName: " + recipeName + " UserId: " + userId);
-        	Users exp = null;
-			try {
-				exp = userDao.getUserById(userId);
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
+        	System.out.println("PostName: " + title + " UserId: " + userId);
+
         	try {
-            	Recipes recipe = new Recipes(recipeName, desc, image, step, cookingTime, created,
-            			type, ingredient, exp);
-        		recipe = recipeDao.create(recipe);
-        		messages.put("success", "Successfully created recipe: " + recipe.getRecipeId());
+        		Users user = userDao.getUserById(userId);
+        		Recipes recipe = recipeDao.getRecipeById(recipeId);
+				Posts post = new Posts(title, content, image, user, created, recipe);
+
+        		post = postDao.create(post);
+        		messages.put("success", "Successfully created post: " + post.getPostId());
         	} catch (SQLException e) {
 				e.printStackTrace();
 				throw new IOException(e);
 	        }
         }
         
-        request.getRequestDispatcher("findRecipes.jsp").forward(request, response);
+        request.getRequestDispatcher("findPosts.jsp").forward(request, response);
 	}
 
 }

@@ -12,9 +12,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import foodies.model.Users;
 import foodies.dal.UsersDao;
 import foodies.dal.RecipeDao;
+import foodies.dal.PostsDao;
 import foodies.model.*;
 
 /**
@@ -24,12 +24,14 @@ import foodies.model.*;
 public class PostUpdate extends HttpServlet {
 	
 	protected RecipeDao recipeDao;
+	protected PostsDao postDao;
 	protected UsersDao userDao;
 	
 	@Override
 	public void init() throws ServletException {
 		recipeDao = RecipeDao.getInstance();
 		userDao = UsersDao.getInstance();
+		postDao = PostsDao.getInstance();
 	}
 
 	@Override
@@ -60,20 +62,19 @@ public class PostUpdate extends HttpServlet {
             messages.put("success", "Invalid RecipeName");
         }
         else {
-        	String desc = request.getParameter("desc");
+        	String content = request.getParameter("content");
         	String image = null;
-        	String ingredient = request.getParameter("ingredient");
-        	String step = request.getParameter("step");
-        	int cookingTime = Integer.valueOf(request.getParameter("cookingTime"));
+        	String title = request.getParameter("title");
+        	
         	Date created = null;
-        	CuisineTypes type = null;
-        	Users exp = null;
-        	int userId = Integer.valueOf(request.getParameter("userId"));
+
+        	Users user = (Users) request.getSession().getAttribute("user");
+        	int postId = Integer.valueOf(request.getParameter("postId"));
         	try {
-            	exp = userDao.getUserById(userId);
-            	Recipes recipe = new Recipes(recipeId, recipeName, desc, image, step, cookingTime, 
-            			created, type, ingredient, exp);
-        		recipe = recipeDao.update(recipe);
+        		Recipes recipe = recipeDao.getRecipeById(recipeId);
+				Posts post = new Posts(postId, title, content, image, user, created, recipe);
+
+        		post = postDao.update(post);
         		//messages.put("success", "Successfully updated recipe: " + recipe.getRecipeId());
         	} catch (SQLException e) {
 				e.printStackTrace();
