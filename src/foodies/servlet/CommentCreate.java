@@ -32,9 +32,7 @@ public class CommentCreate extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Map<String, String> messages = new HashMap<String, String>();
-        request.setAttribute("messages", messages);
-        request.getRequestDispatcher("/recipeCreate.jsp").forward(request, response);
+		doPost(request, response);
 	}
 
 	@Override
@@ -49,10 +47,12 @@ public class CommentCreate extends HttpServlet {
         }
         else {
         	Date created = new Date();
-        	int userId = Integer.valueOf(request.getParameter("userId"));
+        	Users user = (Users)(request.getSession().getAttribute("user"));
+        	int userId = Integer.valueOf(user.getUserId());
+        	System.out.println(userId);
         	int recipeId = Integer.valueOf(request.getParameter("recipeId"));
+        	System.out.println(recipeId);
         	Recipes recipe = null;
-        	Users user = null;
 			try {
 	        	user = userDao.getUserById(userId);
 	        	recipe = recipeDao.getRecipeById(recipeId);
@@ -61,20 +61,17 @@ public class CommentCreate extends HttpServlet {
 			}
         	try {
 
-				Comments comment = new Comments(content,created,user);
-				comment = commentDao.create(comment);
-				RecipeComments recipeComment = new RecipeComments(comment.getCommentId(), content, created, user, recipe);
-
+				RecipeComments recipeComment = new RecipeComments(content, created, user, recipe);
 				recipeCommentDao.create(recipeComment);
 				
-        		messages.put("success", "Successfully created recipe: " + comment.getCommentId());
+        		messages.put("success", "Successfully created recipe: " + recipeComment.getCommentId());
         	} catch (SQLException e) {
 				e.printStackTrace();
 				throw new IOException(e);
 	        }
         }
         
-        request.getRequestDispatcher("findRecipes.jsp").forward(request, response);
+        request.getRequestDispatcher("GetRecipe?recipeId="+request.getParameter("recipeId")).forward(request, response);
 	}
 
 }

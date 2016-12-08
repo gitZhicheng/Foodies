@@ -26,12 +26,14 @@ public class RecipeCommentsDao extends CommentsDao{
 	
 	public RecipeComments create(RecipeComments recipeComment) throws SQLException {
 		// Insert into the superclass table first.
-		create(new Comments(recipeComment.getCommentId(), recipeComment.getContend(), recipeComment.getCreated(), recipeComment.getUser()));
-
+		Comments comment = create(new Comments(recipeComment.getContend(), recipeComment.getCreated(), recipeComment.getUser()));
+		recipeComment.setCommentId(comment.getCommentId());
+		
 		String insertFoodCartRestaurant = "INSERT INTO RecipeComments(CommentId,RecipeId) VALUES(?,?);";
 		Connection connection = null;
 		PreparedStatement insertStmt = null;
 		try {
+			System.out.println("recipeComm");
 			connection = connectionManager.getConnection();
 			insertStmt = connection.prepareStatement(insertFoodCartRestaurant);
 			insertStmt.setInt(1, recipeComment.getCommentId());
