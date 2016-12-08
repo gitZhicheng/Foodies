@@ -32,6 +32,109 @@
 
 <body>
 
+<!-- Modal -->
+<div class="modal fade" id="postModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">Upload Your Work</h4>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="control-group">
+            <label class="control-label" for="postTitle" style="font-weight:bold">Title</label>
+            <input type="text" class="form-control span5" id="postTitle">
+          </div>
+          <div class="control-group">
+            <label for="postContent" style="font-weight:bold">Content</label>
+            <textarea row="3" id="postContent" class="span5"></textarea>
+          </div>
+          <div class="control-group">
+            <label for="postImage" style="font-weight:bold">Upload Your Photo (Optional)</label>
+            <input type="text" class="form-control span5" id="postImage">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="reviewModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">Write A Review</h4>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="control-group">
+            <label for="rating" style="font-weight:bold">Rating</label>
+            <input type="text" class="form-control span1" id="rating"><span style="margin-left:5px"> / 5</span>
+          </div>
+          <div class="control-group">
+            <label for="reviewContent" style="font-weight:bold">Content</label>
+            <textarea row="3" class="span5" id="reviewContent"></textarea>
+          </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">Leave A Comment</h4>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="control-group">
+            <label for="commentContent" style="font-weight:bold">Content</label>
+            <textarea row="5" class="span5" id="commentContent"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="recModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">Recommend To Friends</h4>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="control-group">
+            <label for="toUserName" style="font-weight:bold">To Username</label>
+            <input type="text" class="form-control span5" id="toUserName">
+          </div>
+          <div class="control-group">
+            <label for="recContent" style="font-weight:bold">Content</label>
+            <textarea class="span5" id="recContent"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="container">
 <div id="gototop"> </div>
 <header id="header">
@@ -95,10 +198,10 @@ Navigation Bar Section
   		</div>
   		<div class="span12">
   		  <div class="recipe-navbar">
-  		    <button class="shopBtn btn-block">Made It</button>
-  		    <button class="shopBtn btn-block">Rate It</button>
-  		    <button class="shopBtn btn-block">Comment</button>
-  		    <button class="shopBtn btn-block">Share</button>
+  		    <button class="shopBtn btn-block" data-toggle="modal" data-target="#postModal">I Made It</button>
+  		    <button class="shopBtn btn-block" data-toggle="modal" data-target="#reviewModal">Rate It</button>
+  		    <button class="shopBtn btn-block" data-toggle="modal" data-target="#commentModal">Comment</button>
+  		    <button class="shopBtn btn-block" data-toggle="modal" data-target="#recModal">Share</button>
   		  </div>
   		  <div class="recipe-info span5">
   		    <h3 class="recipe-info-header">Ingredients</h3>
@@ -123,6 +226,12 @@ Navigation Bar Section
 </div>
 
 </div>
-
+<a href="#" class="gotop"><i class="icon-double-angle-up"></i></a>
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="assets/js/jquery.js"></script>
+	<script src="assets/js/bootstrap.min.js"></script>
+	<script src="assets/js/jquery.easing-1.3.min.js"></script>
+    <script src="assets/js/jquery.scrollTo-1.4.3.1-min.js"></script>
+    <script src="assets/js/shop.js"></script>
 </body>
 </html>

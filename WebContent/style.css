@@ -122,7 +122,7 @@ hr.soften {margin: 8px 0;background: #DDD;}
 .btn-block + .btn-block{margin-top:0}
 .recipe-navbar{padding-top:20px}
 .recipe-navbar .shopBtn{margin:0 5px;width:23%}
-.recipe-info{color:#4d4d4d;margin-right:30px;}
+.recipe-info{color:#4d4d4d;margin-right:30px;margin-bottom:40px}
 .recipe-info li{padding:10px 0}
 .recipe-info-header{margin-top:20px;padding-bottom:10px;font-weight: normal;border-bottom:1px solid #e6e6e6}
 .cuisinetype a{color:#777777}
