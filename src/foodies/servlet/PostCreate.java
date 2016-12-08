@@ -50,11 +50,10 @@ public class PostCreate extends HttpServlet {
         	int recipeId = Integer.valueOf(request.getParameter("recipeId"));
         	Date created = new Date();
         	String image = null;
-        	int userId = Integer.valueOf(request.getParameter("userId"));
-        	System.out.println("PostName: " + title + " UserId: " + userId);
+        	Users user = (Users)(request.getSession().getAttribute("user"));
+        	
 
         	try {
-        		Users user = userDao.getUserById(userId);
         		Recipes recipe = recipeDao.getRecipeById(recipeId);
 				Posts post = new Posts(title, content, image, user, created, recipe);
 
