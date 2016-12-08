@@ -47,8 +47,8 @@ public class RecipeDao {
 			insertStmt.setTimestamp(6, new Timestamp(recipe.getCreated().getTime()));
 			//insertStmt.setInt(7, recipe.getCuisineTypes().getCuisineTypeId());
 			insertStmt.setInt(7, 0);
-			insertStmt.setString(8, recipe.getIngredientid());
-			insertStmt.setInt(9, recipe.getExperienced().getUserId());
+			insertStmt.setString(8, recipe.getIngredients());
+			insertStmt.setInt(9, recipe.getUser().getUserId());
 			insertStmt.executeUpdate();
 			
 			resultKey = insertStmt.getGeneratedKeys();
@@ -129,7 +129,7 @@ public class RecipeDao {
 				int cookTime = results.getInt("CookingTime");
 				Date created = results.getDate("Created");
 				int cuisineTypeId = results.getInt("CuisineTypeId");
-				String ingredients = results.getString("Ingredients");
+				String ingredients = results.getString("IngredientId");
 	
 				Experienced user = experiencedDao.getExperiencedById(userId);
 				CuisineTypes cuisineType = cuisineTypesDao.getCuisineTypesById(cuisineTypeId);

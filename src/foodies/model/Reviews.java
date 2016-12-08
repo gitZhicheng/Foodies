@@ -58,5 +58,5 @@ public class Reviews {
 	public void setRecipe(Recipes recipe) {
 		this.recipe = recipe;
 	}
-
+	
 }

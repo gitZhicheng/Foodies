@@ -1,11 +1,13 @@
 package foodies.dal;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.Date;
 
 import foodies.model.*;
 
@@ -95,6 +97,52 @@ public class RecommendationsDao {
 				deleteStmt.close();
 			}
 		}
+	}
+	
+	public Recommendations getRecommendationByRecommendationId(int recommendationId) throws SQLException{
+		String selectRecommendations = "SELECT * FROM Recommendations WHERE RecommendationId=?;";
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		
+		try {
+			UsersDao usersDao = UsersDao.getInstance();
+			RecipeDao recipesDao = RecipeDao.getInstance();
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectRecommendations);
+			selectStmt.setInt(1, recommendationId);
+			results = selectStmt.executeQuery();
+			
+			if(results.next()) {
+				int fromUserId = results.getInt("From_UserId");
+				int toUserId = results.getInt("To_UserId");
+				Users fromUser = usersDao.getUserById(fromUserId);
+				Users toUser = usersDao.getUserById(toUserId);
+				int recipeId = results.getInt("RecipeId");
+				Recipes recipe = recipesDao.getRecipeById(recipeId);
+				
+				String content = results.getString("Content");
+				
+				Date created = results.getDate("Created");
+
+				Recommendations recommendation = new Recommendations(recommendationId, fromUser, toUser, content, created, recipe);
+				return recommendation;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		return null;
 	}
 
 }

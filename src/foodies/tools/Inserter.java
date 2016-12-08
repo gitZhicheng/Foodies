@@ -11,8 +11,6 @@ import food.model.Experienced;
 import food.model.Novice;
 import food.model.Users;
 
-
-
 public class inserter {
 
 	public static void main(String[] args) throws SQLException {

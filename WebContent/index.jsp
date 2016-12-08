@@ -38,7 +38,7 @@
 				  $("#failmsg").show();  
 			  }
 			  else {
-				  window.location = "index.jsp";
+				  window.location = "FetchUser";
 			  }
 		  }
 	  });

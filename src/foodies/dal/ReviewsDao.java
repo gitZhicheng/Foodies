@@ -1,10 +1,14 @@
 package foodies.dal;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import foodies.model.*;
 
@@ -25,7 +29,7 @@ public class ReviewsDao {
 
 	public Reviews create(Reviews review) throws SQLException {
 		String insertReview =
-			"INSERT INTO Reviews(Rating,UserId,RecipeId) " +
+			"INSERT INTO Reviews(Rating,UserId,ReviewId) " +
 			"VALUES(?,?,?);";
 		Connection connection = null;
 		PreparedStatement insertStmt = null;
@@ -36,7 +40,7 @@ public class ReviewsDao {
 				Statement.RETURN_GENERATED_KEYS);
 			insertStmt.setBigDecimal(1, review.getRating());
 			insertStmt.setInt(2, review.getUser().getUserId());
-			insertStmt.setInt(3, review.getRecipe().getRecipeId());
+			insertStmt.setInt(3, review.getReviewId());
 			insertStmt.executeUpdate();
 
 			// Retrieve the auto-generated key and set it, so it can be used by the caller.
@@ -91,6 +95,88 @@ public class ReviewsDao {
 				deleteStmt.close();
 			}
 		}
+	}
+	
+	public List<Reviews> getReviewsByUserId(int userId) throws SQLException{
+		List<Reviews> reviews = new ArrayList<Reviews>();
+		String selectReviews = "SELECT * FROM Reviews WHERE UserId=?;";
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		try {
+			UsersDao usersDao = UsersDao.getInstance();
+			RecipeDao recipesDao = RecipeDao.getInstance();
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectReviews);
+			selectStmt.setInt(1, userId);
+			results = selectStmt.executeQuery();
+			while(results.next()) {
+				Users user = usersDao.getUserById(userId);
+				int reviewId = results.getInt("ReviewId");
+				int recipeId = results.getInt("RecipeId");
+				Recipes recipe = recipesDao.getRecipeById(recipeId);
+				
+				BigDecimal rating = results.getBigDecimal("Rating");
+				Reviews review = new Reviews(reviewId, rating, user, recipe);
+				reviews.add(review);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		return reviews;
+	}
+	
+	public Reviews getReviewByReviewId(int reviewId) throws SQLException{
+		String selectReviews = "SELECT * FROM Reviews WHERE ReviewId=?;";
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		
+		try {
+			UsersDao usersDao = UsersDao.getInstance();
+			RecipeDao recipesDao = RecipeDao.getInstance();
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectReviews);
+			selectStmt.setInt(1, reviewId);
+			results = selectStmt.executeQuery();
+			
+			if(results.next()) {
+				int userId = results.getInt("UserId");
+				
+				Users user = usersDao.getUserById(userId);
+				int recipeId = results.getInt("RecipeId");
+				Recipes recipe = recipesDao.getRecipeById(recipeId);
+				
+				BigDecimal rating = results.getBigDecimal("Rating");
+				Reviews review = new Reviews(reviewId, rating, user, recipe);
+				return review;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		return null;
 	}
 
 }
