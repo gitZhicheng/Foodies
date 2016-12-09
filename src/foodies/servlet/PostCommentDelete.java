@@ -11,19 +11,28 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import foodies.dal.RecipeDao;
+import foodies.dal.CommentsDao;
+import foodies.dal.PostCommentsDao;
+import foodies.dal.PostsDao;
+import foodies.dal.UsersDao;
 import foodies.model.*;
 
 /**
- * Servlet implementation class RecipeDelete
+ * Servlet implementation class PostDelete
  */
 @WebServlet("/PostCommentDelete")
 public class PostCommentDelete extends HttpServlet {
 
-	protected RecipeDao recipeDao;
+	protected PostsDao postDao;
+	protected PostCommentsDao postCommentsDao;
+	protected CommentsDao commentDao;
+	protected UsersDao usersDao;
 	
 	public void init() throws ServletException {
-		recipeDao = RecipeDao.getInstance();
+		postDao = PostsDao.getInstance();
+		usersDao = UsersDao.getInstance();
+		postCommentsDao = PostCommentsDao.getInstance();
+		commentDao = CommentsDao.getInstance();
 	}
 
 	@Override
@@ -31,17 +40,17 @@ public class PostCommentDelete extends HttpServlet {
 		Map<String, String> messages = new HashMap<String, String>();
         request.setAttribute("messages", messages);
         
-		int recipeId = Integer.valueOf(request.getParameter("recipeId"));
+		int commentId = Integer.valueOf(request.getParameter("commentId"));
 		try {
-			Recipes recipe = recipeDao.getRecipeById(recipeId);
-			recipeDao.delete(recipe);
-			messages.put("success", "Successfully deleted recipe: " + recipeId);
+			PostComments postComment = postCommentsDao.getCommentById(commentId);
+			postCommentsDao.delete(postComment);
+			messages.put("success", "Successfully deleted comment: " + commentId);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new IOException(e);
         }
 		
-		request.getRequestDispatcher("findRecipes.jsp").forward(request, response);
+		request.getRequestDispatcher("findPosts.jsp").forward(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

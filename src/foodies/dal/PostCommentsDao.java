@@ -6,6 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import foodies.model.*;
 
@@ -80,6 +83,95 @@ public class PostCommentsDao extends CommentsDao{
 				deleteStmt.close();
 			}
 		}
+	}
+	
+	public List<PostComments> getCommentsByPostId(int postId) throws SQLException{
+		List<PostComments> comments = new ArrayList<PostComments>();
+		String selectComments = "SELECT * FROM Comments INNER JOIN PostComments ON"
+				+ " Comments.CommentID = PostComments.CommentID WHERE RecipeId=?;";
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		try {
+			UsersDao usersDao = UsersDao.getInstance();
+			PostsDao postsDao = PostsDao.getInstance();
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectComments);
+			selectStmt.setInt(1, postId);
+			results = selectStmt.executeQuery();
+			while(results.next()) {
+				int commentId = results.getInt("CommentId");
+				int userId = results.getInt("userId");
+				Users user = usersDao.getUserById(userId);
+
+				String content = results.getString("Content");
+				Date created = results.getDate("Created");
+
+				Posts post = postsDao.getPostByPostId(postId);
+				
+				PostComments comment = new PostComments(commentId, content, created, user, post);
+				comments.add(comment);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		return comments;
+	}
+	
+	public PostComments getCommentById(int commentId) throws SQLException{
+		String selectComments = "SELECT * FROM Comments INNER JOIN RecipeComments ON"
+				+ " Comments.CommentID = RecipeComments.CommentID WHERE RecipeId=?;";
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		
+		try {
+			UsersDao usersDao = UsersDao.getInstance();
+			PostsDao postsDao = PostsDao.getInstance();
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectComments);
+			selectStmt.setInt(1, commentId);
+			results = selectStmt.executeQuery();
+			
+			if(results.next()) {
+				int userId = results.getInt("userId");
+				Users user = usersDao.getUserById(userId);
+
+				String content = results.getString("Content");
+				Date created = results.getDate("Created");
+				int postId = results.getInt("RecipeId");
+
+				Posts post = postsDao.getPostByPostId(postId);
+				
+				PostComments comment = new PostComments(commentId, content, created, user, post);
+				return comment;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		return null;
 	}
 	
 	
