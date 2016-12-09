@@ -45,4 +45,27 @@ def update_comment_content():
 		cursor.execute(update_stmt, (comment, commendId[0]))
 
 	conn.commit()
-update_comment_content()
+#update_comment_content()
+
+def update_post_image():
+	select_stmt = "SELECT PostId FROM Foodies.Posts;"
+	update_stmt = "UPDATE Foodies.Posts SET Image = %s WHERE PostId = %s"
+	image1 = "https://goo.gl/images/9rufwi"
+	image2 = "https://goo.gl/images/2bybcP"
+	image3 = "https://goo.gl/images/raqyV3"
+	image4 = "https://goo.gl/images/UDMJ9N"
+	image5 = "https://goo.gl/images/wuN0Qw"
+	image_list = [image1, image2, image3, image4, image5]
+
+	cursor.execute(select_stmt)
+	for postId in cursor:
+		image = image_list[randint(0,4)]
+		cursor.execute(update_stmt, (image, postId[0]))
+
+	conn.commit()
+
+update_post_image()
+
+
+
+

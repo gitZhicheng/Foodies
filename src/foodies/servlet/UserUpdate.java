@@ -12,28 +12,43 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import foodies.dal.*;
+import foodies.dal.UsersDao;
+import foodies.dal.RecipeDao;
+import foodies.dal.PostsDao;
 import foodies.model.*;
 
-@WebServlet("/RecipeCreate")
-public class RecipeCreate extends HttpServlet {
+/**
+ * Servlet implementation class RecipeUpdate
+ */
+@WebServlet("/UserUpdate")
+public class UserUpdate extends HttpServlet {
 	
 	protected RecipeDao recipeDao;
+	protected PostsDao postDao;
 	protected UsersDao userDao;
-	protected CuisineTypesDao cuisineTypeDao;
-       
+	
 	@Override
 	public void init() throws ServletException {
 		recipeDao = RecipeDao.getInstance();
 		userDao = UsersDao.getInstance();
-		cuisineTypeDao = CuisineTypesDao.getInstance();
+		postDao = PostsDao.getInstance();
 	}
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Map<String, String> messages = new HashMap<String, String>();
         request.setAttribute("messages", messages);
-        request.getRequestDispatcher("/recipeCreate.jsp").forward(request, response);
+        int recipeId = Integer.valueOf(request.getParameter("recipeId"));
+        System.out.println(""+recipeId);
+        Recipes recipe = null;
+		try {
+			recipe = recipeDao.getRecipeById(recipeId);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        request.setAttribute("recipe", recipe);
+        request.getRequestDispatcher("recipeUpdate.jsp").forward(request, response);
 	}
 
 	@Override
@@ -42,33 +57,22 @@ public class RecipeCreate extends HttpServlet {
         request.setAttribute("messages", messages);
         
         String recipeName = request.getParameter("recipeName");
-        System.out.println("RecipeName: " + recipeName);
         if (recipeName == null || recipeName.trim().isEmpty()) {
             messages.put("success", "Invalid RecipeName");
         }
         else {
-        	String desc = request.getParameter("desc");
-        	String ingredient = request.getParameter("ingredient");
-        	String step = request.getParameter("step");
-        	int cookingTime = Integer.valueOf(request.getParameter("cookingTime"));
-        	Date created = new Date();
-        	String image = request.getParameter("image");
-        	String cuisineName = request.getParameter("cuisineName");
-        	int userId = Integer.valueOf(request.getParameter("userId"));
-        	System.out.println("RecipeName: " + recipeName + " UserId: " + userId);
-        	Users exp = null;
-        	CuisineTypes type = null;
-			try {
-	        	type = cuisineTypeDao.getCuisineTypesByName(cuisineName);
-				exp = userDao.getUserById(userId);
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
+        	String firstName = request.getParameter("firstName");
+        	String lastName = request.getParameter("lastName");
+        	String email = request.getParameter("email");
+        	String pass = request.getParameter("password");
+        	
+
+        	Users user = (Users) request.getSession().getAttribute("user");
         	try {
-            	Recipes recipe = new Recipes(recipeName, desc, image, step, cookingTime, created,
-            			type, ingredient, exp);
-        		recipe = recipeDao.create(recipe);
-        		messages.put("success", "Successfully created recipe: " + recipe.getRecipeId());
+				Users newUser = new Users(user.getUserId(), user.getUserName(), pass, firstName, lastName, email);
+
+        		user = userDao.update(newUser);
+        		//messages.put("success", "Successfully updated recipe: " + recipe.getRecipeId());
         	} catch (SQLException e) {
 				e.printStackTrace();
 				throw new IOException(e);

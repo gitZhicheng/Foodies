@@ -128,6 +128,43 @@ public class CuisineTypesDao {
 		return null;
 	}
 	
+	public CuisineTypes getCuisineTypesByName(String name) throws SQLException {
+		String selectCuisineType = "SELECT * FROM CuisineTypes WHERE Name=?;";
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		try {
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectCuisineType);
+			selectStmt.setString(1, name);
+
+			results = selectStmt.executeQuery();
+
+			if(results.next()) {
+				int resultCuisineId = results.getInt("CuisineTypeId");
+				int parentId = results.getInt("ParentId");
+				String parentIds = results.getString("ParentIds");
+
+				CuisineTypes cuisineType = new CuisineTypes(resultCuisineId, name, parentId, parentIds);
+				return cuisineType;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		return null;
+	}
+	
 	public List<CuisineTypes> getCuisineTypesOrderByCreated() throws SQLException {
 		List<CuisineTypes> cuisineTypes = new ArrayList<CuisineTypes>();
 		String selectCuisineType = "SELECT * FROM CuisineTypes "

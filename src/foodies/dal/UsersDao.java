@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import foodies.model.Posts;
 import foodies.model.Users;
 
 
@@ -143,6 +144,37 @@ public class UsersDao{
 			return null;
 	}
 
+	public Users update(Users user) throws SQLException {
+		String updateUser = "UPDATE User SET FirstName=?,LastName=?,Password=?, Email=? WHERE UserId=? ;";
+		Connection connection = null;
+		PreparedStatement updateStmt = null;
+		try {
+			connection = connectionManager.getConnection();
+			updateStmt = connection.prepareStatement(updateUser);
+			updateStmt.setString(1, user.getFirstName());
+			updateStmt.setString(2, user.getLastName());
+			updateStmt.setString(3, user.getPassword());
+			updateStmt.setString(4, user.getEmail());
+			updateStmt.setInt(5, user.getUserId());
+			
+
+			updateStmt.executeUpdate();
+
+			// Return null so the caller can no longer operate on the Persons instance.
+			return null;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(updateStmt != null) {
+				updateStmt.close();
+			}
+		}
+	}
+	
 	public Users getUserByUserName(String username) throws SQLException {
 		String selectUser =
 				"SELECT UserId,UserName,Password,Firstname,LastName,Email " +
