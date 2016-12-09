@@ -1,13 +1,15 @@
 package foodies.dal;
 
-import java.math.BigDecimal;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import foodies.model.*;
 
@@ -72,7 +74,8 @@ public class PostsDao {
 		}
 
 	}
-	public Posts getPostByRecipeId(int recipeId) throws SQLException{
+	public List<Posts> getPostsByRecipeId(int recipeId) throws SQLException{
+		List<Posts> posts = new ArrayList<Posts>();
 		String selectRecipes = "SELECT * FROM Posts WHERE RecipeId=?;";
 		Connection connection = null;
 		PreparedStatement selectStmt = null;
@@ -85,7 +88,7 @@ public class PostsDao {
 			selectStmt.setInt(1, recipeId);
 			results = selectStmt.executeQuery();
 			
-			if(results.next()) {
+			while(results.next()) {
 				int userId = results.getInt("UserId");
 				int postId = results.getInt("PostId");
 				String title = results.getString("Title");
@@ -99,7 +102,7 @@ public class PostsDao {
 
 				Posts post = new Posts(postId, title, content, image, user, created, recipe);
 				
-				return post;
+				posts.add(post);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -115,7 +118,7 @@ public class PostsDao {
 				results.close();
 			}
 		}
-		return null;
+		return posts;
 	}
 	
 	public Posts getPostByPostId(int postId) throws SQLException{
