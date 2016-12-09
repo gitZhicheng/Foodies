@@ -18,20 +18,23 @@ import foodies.model.*;
 @WebServlet("/RecommendationCreate")
 public class RecommendationCreate extends HttpServlet {
 	
-	protected RecipeDao recipeDao;
+	protected RecommendationsDao recommendationDao;
 	protected UsersDao userDao;
-       
+    protected RecipeDao recipeDao;
+
 	@Override
 	public void init() throws ServletException {
-		recipeDao = RecipeDao.getInstance();
+		recommendationDao = RecommendationsDao.getInstance();
 		userDao = UsersDao.getInstance();
+		recipeDao = RecipeDao.getInstance();
+
 	}
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Map<String, String> messages = new HashMap<String, String>();
         request.setAttribute("messages", messages);
-        request.getRequestDispatcher("/recipeCreate.jsp").forward(request, response);
+        request.getRequestDispatcher("/recommendationCreate.jsp").forward(request, response);
 	}
 
 	@Override
@@ -39,39 +42,31 @@ public class RecommendationCreate extends HttpServlet {
 		Map<String, String> messages = new HashMap<String, String>();
         request.setAttribute("messages", messages);
         
-        String recipeName = request.getParameter("recipeName");
-        System.out.println("RecipeName: " + recipeName);
-        if (recipeName == null || recipeName.trim().isEmpty()) {
-            messages.put("success", "Invalid RecipeName");
+        String content = request.getParameter("content");
+        System.out.println("Recommendation: " + content);
+        if (content == null || content.trim().isEmpty()) {
+            messages.put("failed", "Invalid Recommendation");
         }
         else {
-        	String desc = request.getParameter("desc");
-        	String ingredient = request.getParameter("ingredient");
-        	String step = request.getParameter("step");
-        	int cookingTime = Integer.valueOf(request.getParameter("cookingTime"));
+
+        	int recipeId = Integer.valueOf(request.getParameter("recipeId"));
+        	int toUserId = Integer.valueOf(request.getParameter("toUserId"));
         	Date created = new Date();
-        	String image = null;
-        	CuisineTypes type = null;
-        	int userId = Integer.valueOf(request.getParameter("userId"));
-        	System.out.println("RecipeName: " + recipeName + " UserId: " + userId);
-        	Users exp = null;
-			try {
-				exp = userDao.getUserById(userId);
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
+        	Users user = (Users)(request.getSession().getAttribute("user"));
+
         	try {
-            	Recipes recipe = new Recipes(recipeName, desc, image, step, cookingTime, created,
-            			type, ingredient, exp);
-        		recipe = recipeDao.create(recipe);
-        		messages.put("success", "Successfully created recipe: " + recipe.getRecipeId());
+            	Users toUser = userDao.getUserById(toUserId);
+            	Recipes recipe = recipeDao.getRecipeById(recipeId);
+            	Recommendations recommendation = new Recommendations(user, toUser, content, created, recipe);
+        		recommendation = recommendationDao.create(recommendation);
+        		messages.put("success", "Successfully created recommendation: " + recommendation.getRecommendationId());
         	} catch (SQLException e) {
 				e.printStackTrace();
 				throw new IOException(e);
 	        }
         }
         
-        request.getRequestDispatcher("findRecipes.jsp").forward(request, response);
+        request.getRequestDispatcher("findRecommendations.jsp").forward(request, response);
 	}
 
 }
