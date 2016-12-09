@@ -109,7 +109,7 @@ public class RecipeDao {
 		}
 	}
 	public Recipes getRecipeById(int recipeId) throws SQLException{
-		String selectRecipes = "SELECT * FROM Recipes WHERE RecipeId=? AND Steps is not NULL;";
+		String selectRecipes = "SELECT * FROM Recipes WHERE RecipeId=? AND Steps is not NULL AND Ingredients is not NULL;";
 		Connection connection = null;
 		PreparedStatement selectStmt = null;
 		ResultSet results = null;
@@ -157,7 +157,7 @@ public class RecipeDao {
 	
 	public List<Recipes> getRecipesByUserId(int userId) throws SQLException{
 		List<Recipes> recipes = new ArrayList<Recipes>();
-		String selectRecipes = "SELECT * FROM Recipes WHERE UserId=? AND Steps is not NULL;";
+		String selectRecipes = "SELECT * FROM Recipes WHERE UserId=? AND Steps is not NULL AND Ingredients is not NULL;";
 		Connection connection = null;
 		PreparedStatement selectStmt = null;
 		ResultSet results = null;
@@ -203,7 +203,8 @@ public class RecipeDao {
 	
 	public List<Recipes> getRecipesByNameOrderByCreated(String rcpName) throws SQLException{
 		List<Recipes> recipes = new ArrayList<Recipes>();
-		String selectRecipes = "SELECT * FROM Recipes WHERE PostName like ? AND Steps is not NULL" + " ORDER BY Created DESC LIMIT 10;";
+		String selectRecipes = "SELECT * FROM Recipes WHERE PostName like ? AND Steps is not NULL AND Ingredients is not NULL"
+								+ " ORDER BY Created DESC LIMIT 10;";
 		Connection connection = null;
 		PreparedStatement selectStmt = null;
 		ResultSet results = null;
@@ -258,7 +259,7 @@ public class RecipeDao {
 								+ "ORDER BY AVG_RATING DESC) AS REV "
 								+ "INNER JOIN Recipes "
 								+ "ON REV.RecipeId = Recipes.RecipeId "
-								+ "WHERE Recipes.PostName like ? AND Recipes.Steps is not NULL "
+								+ "WHERE Recipes.PostName like ? AND Recipes.Steps is not NULL AND Recipes.Ingredients is not NULL "
 								+ "LIMIT 20";		
 		
 		Connection connection = null;
@@ -315,7 +316,7 @@ public class RecipeDao {
 								+ "ORDER BY CNT DESC) AS POST "
 								+ "INNER JOIN Recipes "
 								+ "ON POST.RecipeId = Recipes.RecipeId "
-								+ "WHERE Recipes.PostName like ? AND Recipes.Steps is not NULL "
+								+ "WHERE Recipes.PostName like ? AND Recipes.Steps is not NULL AND Recipes.Ingredients is not NULL "
 								+ "LIMIT 20";		
 		
 		Connection connection = null;
@@ -375,7 +376,8 @@ public class RecipeDao {
 		
 	public List<Recipes> getRecipesByCuisineOrderByCreated(int cuisineId) throws SQLException{
 		List<Recipes> recipes = new ArrayList<Recipes>();
-		String selectCreditcards = "SELECT * FROM Recipes WHERE CuisineTypeId=? AND Steps is not NULL" + " ORDER BY Created DESC LIMIT 10;";
+		String selectCreditcards = "SELECT * FROM Recipes WHERE CuisineTypeId=? AND Steps is not NULL AND Ingredients is not NULL" 
+									+ " ORDER BY Created DESC LIMIT 10;";
 		Connection connection = null;
 		PreparedStatement selectStmt = null;
 		ResultSet results = null;
@@ -429,7 +431,7 @@ public class RecipeDao {
 									+ "ORDER BY AVG_RATING DESC) AS REV "
 									+ "INNER JOIN Recipes "
 									+ "ON REV.RecipeId = Recipes.RecipeId "
-									+ "WHERE Recipes.CuisineTypeId=? AND Recipes.Steps is not NULL "
+									+ "WHERE Recipes.CuisineTypeId=? AND Recipes.Steps is not NULL AND Recipes.Ingredients is not NULL "
 									+ "LIMIT 20";	
 		Connection connection = null;
 		PreparedStatement selectStmt = null;
@@ -484,7 +486,7 @@ public class RecipeDao {
 									+ "ORDER BY CNT DESC) AS POST "
 									+ "INNER JOIN Recipes "
 									+ "ON POST.RecipeId = Recipes.RecipeId "
-									+ "WHERE Recipes.CuisineTypeId=? AND Recipes.Steps is not NULL "
+									+ "WHERE Recipes.CuisineTypeId=? AND Recipes.Steps is not NULL AND Recipes.Ingredients is not NULL "
 									+ "LIMIT 20";	
 		Connection connection = null;
 		PreparedStatement selectStmt = null;
