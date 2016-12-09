@@ -1,6 +1,7 @@
 package foodies.servlet;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
@@ -19,12 +20,14 @@ import foodies.model.*;
 public class ReviewCreate extends HttpServlet {
 	
 	protected RecipeDao recipeDao;
+	protected ReviewsDao reviewDao;
 	protected UsersDao userDao;
        
 	@Override
 	public void init() throws ServletException {
 		recipeDao = RecipeDao.getInstance();
 		userDao = UsersDao.getInstance();
+		reviewDao = ReviewsDao.getInstance();
 	}
 
 	@Override
@@ -45,31 +48,23 @@ public class ReviewCreate extends HttpServlet {
             messages.put("success", "Invalid RecipeName");
         }
         else {
-        	String desc = request.getParameter("desc");
-        	String ingredient = request.getParameter("ingredient");
-        	String step = request.getParameter("step");
-        	int cookingTime = Integer.valueOf(request.getParameter("cookingTime"));
-        	Date created = new Date();
-        	String image = null;
-        	CuisineTypes type = null;
-        	int userId = Integer.valueOf(request.getParameter("userId"));
-        	System.out.println("RecipeName: " + recipeName + " UserId: " + userId);
-        	Users exp = null;
-			try {
-				exp = userDao.getUserById(userId);
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
+        	BigDecimal rating = new BigDecimal(request.getParameter("rating"));
+
+        	int recipeId = Integer.valueOf(request.getParameter("recipeId"));
+        	Users user = (Users)(request.getSession().getAttribute("user"));
         	try {
-            	Recipes recipe = new Recipes(recipeName, desc, image, step, cookingTime, created,
-            			type, ingredient, exp);
-        		recipe = recipeDao.create(recipe);
-        		messages.put("success", "Successfully created recipe: " + recipe.getRecipeId());
+        		Recipes recipe = recipeDao.getRecipeById(recipeId);
+				Reviews review = new Reviews(rating, user, recipe);
+
+        		review = reviewDao.create(review);
+        		messages.put("success", "Successfully created review: " + review.getReviewId());
         	} catch (SQLException e) {
 				e.printStackTrace();
 				throw new IOException(e);
 	        }
         }
+
+        
         
         request.getRequestDispatcher("findRecipes.jsp").forward(request, response);
 	}
